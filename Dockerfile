@@ -42,8 +42,8 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # Скопируйте остальные файлы проекта
-COPY . /app/
-
+COPY . /app
+RUN python manage.py collectstatic --no-input
 COPY backup.sh /app/backup.sh
 #RUN chmod +x /usr/src/app/backup.sh
 #RUN echo "0 0 * * * /bin/bash /usr/src/app/backup.sh >> /usr/src/app/backup.log 2>&1" > /etc/cron.d/backup-cron

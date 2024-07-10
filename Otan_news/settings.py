@@ -96,25 +96,25 @@ WSGI_APPLICATION = 'Otan_news.wsgi.application'
 #     }
 # }
 
-import os
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-
+# import os
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'postgres',  # Имя вашей базы данных
-#         'USER': 'postgres',  # Ваше имя пользователя PostgreSQL
-#         'PASSWORD': 'postgres',  # Ваш пароль пользователя PostgreSQL
-#         'HOST': 'pgdb',  # Имя сервиса контейнера Docker
-#         'PORT': '5432',
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',  # Имя вашей базы данных
+        'USER': 'postgres',  # Ваше имя пользователя PostgreSQL
+        'PASSWORD': 'postgres',  # Ваш пароль пользователя PostgreSQL
+        'HOST': 'pgdb',  # Имя сервиса контейнера Docker
+        'PORT': '5432',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -148,7 +148,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = '/app/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
