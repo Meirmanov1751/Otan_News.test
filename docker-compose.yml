@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  pgdb:
+    image: postgres:13  # Используем версию 13 PostgreSQL
+    container_name: pgdb
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - app_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  django:
+    build: .
+    container_name: django
+    command: gunicorn Otan_news.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - pgdb  # Зависимость от контейнера PostgreSQL
+    environment:
+      - POSTGRES_HOST=pgdb
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - app_network
+
+
+
+  redis:
+    image: redis:6.2
+    ports:
+      - "6379:6379"
+    networks:
+      - app_network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - app_network
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "1337:80"
+    depends_on:
+      - django
+    networks:
+      - app_network
+
+  celery:
+    build: .
+    command: celery -A your_project worker -l info
+    volumes:
+      - .:/app
+    depends_on:
+      - pgdb
+      - redis
+      - rabbitmq
+    networks:
+      - app_network
+
+  celery_beat:
+    build: .
+    command: celery -A your_project beat -l info
+    volumes:
+      - .:/app
+    depends_on:
+      - pgdb
+      - redis
+      - rabbitmq
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
