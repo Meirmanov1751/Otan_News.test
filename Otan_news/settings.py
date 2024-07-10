@@ -28,11 +28,40 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CORS_ALLOWED_ORIGINS = [
+    'http://185.129.51.236:1337',
+    'https://185.129.51.236:1337',
+    'http://185.129.51.236',
+    'https://185.129.51.236',
+]
+
 CORS_ALLOW_ALL_ORIGINS = True
-
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
 
-CSRF_COOKIE_SECURE = False
+CSRF_TRUSTED_ORIGINS = [
+    'http://185.129.51.236:1337',
+    'https://185.129.51.236:1337',
+    'http://185.129.51.236',
+    'https://185.129.51.236',]
 # Application definition
 
 INSTALLED_APPS = [
