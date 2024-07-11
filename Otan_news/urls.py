@@ -34,10 +34,9 @@ sitemaps = {
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Your API",
+        title="API",
         default_version='v1',
         description="API documentation",
-        license=openapi.License(name="BSD License"),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
