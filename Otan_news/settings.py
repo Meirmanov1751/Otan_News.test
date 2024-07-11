@@ -204,7 +204,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/app/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+# Ensure these settings are correct
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -244,13 +249,6 @@ DJOSER = {
     'SEND_CONFIRMATION_SMS': True,
 }
 
-SENDSMS_BACKEND = 'sendsms.backends.http.HttpBackend'
-SENDSMS_HTTP_URL = 'https://smsc.kz/sys/send.php'  # URL SMSC API для отправки SMS
-SENDSMS_HTTP_PARAMS = {
-    'login': 'your_smsc_login',
-    'psw': 'your_smsc_password',
-    'fmt': '3',  # Формат ответа JSON
-}
 
 # Redis settings
 REDIS_HOST = 'localhost'
