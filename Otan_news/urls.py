@@ -6,7 +6,7 @@ from rest_framework.routers import DefaultRouter
 from django.conf import settings
 from rest_framework_swagger.views import get_swagger_view
 
-schema_view = get_swagger_view(title='Pastebin API')
+schema_view = get_swagger_view(title='API Documentation')
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -32,7 +32,7 @@ sitemaps = {
 }
 
 urlpatterns = [
-    path('', schema_view),
+    path('swagger/', schema_view),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
     path('auth/', include('djoser.urls.jwt')),
