@@ -1,15 +1,19 @@
 from django.shortcuts import render
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, viewsets
 from rest_framework.response import Response
 from rest_framework import viewsets
 from .models import News, Comment
 from .serializers import NewsSerializer, CommentSerializer, NewsShortSerializer
+from .filters import NewsFilter, CommentFilter, SubscriberFilter
 
 
 class NewsViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
                    mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = NewsFilter
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
