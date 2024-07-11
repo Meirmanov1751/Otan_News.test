@@ -4,9 +4,7 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from django.conf import settings
-from rest_framework_swagger.views import get_swagger_view
-
-schema_view = get_swagger_view(title='API Documentation')
+from .yasg import urlpatterns as doc_urls
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -43,3 +41,5 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += doc_urls
