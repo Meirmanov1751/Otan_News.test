@@ -30,6 +30,7 @@ sitemaps = {
 }
 
 urlpatterns = [
+    path('', include(doc_urls)),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
     path('auth/', include('djoser.urls.jwt')),
@@ -40,5 +41,3 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-urlpatterns += doc_urls
