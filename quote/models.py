@@ -6,7 +6,7 @@ class Quote(models.Model):
     quote_author = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"Quote {self.quote_author}"
+        return f"Цитата {self.quote_author}"
 
     def get_absolute_url(self):
         return reverse('quote-detail', args=[str(self.id)])
@@ -28,4 +28,4 @@ class QuoteTranslation(models.Model):
         verbose_name_plural = "Переводы цитат"
 
     def __str__(self):
-        return f"Quote {self.quote_id.id} ({self.lang})"
+        return f"Цитата {self.quote_id.id} ({self.lang})"

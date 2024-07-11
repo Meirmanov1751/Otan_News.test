@@ -16,5 +16,5 @@ class TagTranslation(models.Model):
         unique_together = ('tag_id', 'lang')
 
     def __str__(self):
-        return f"Tag {self.tag_id.id} ({self.lang})"
+        return f"Тег {self.tag_id.id} ({self.lang})"
 

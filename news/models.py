@@ -33,7 +33,7 @@ class News(models.Model):
     views = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f"News {self.id}"
+        return f"Новость {self.id}"
 
     def get_absolute_url(self):
         return reverse('news-detail', args=[str(self.id)])
@@ -72,7 +72,7 @@ class NewsTag(models.Model):
         verbose_name_plural = "Теги новостей"
 
     def __str__(self):
-        return f"News {self.news.id} - Tag {self.tag.tag_name}"
+        return f"Новость {self.news.id} - Тег {self.tag.tag_name}"
 
 
 class Comment(models.Model):
@@ -82,7 +82,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Comment {self.id} on News {self.news.id}"
+        return f"Коммента́рий {self.id} на новость {self.news.id}"
 
     class Meta:
         ordering = ["id"]
@@ -106,7 +106,7 @@ class VoteComment(models.Model):
         verbose_name_plural = "Голоса за комментарии"
 
     def __str__(self):
-        return f"{self.vote_type} by User {self.user_id} on Comment {self.comment.id}"
+        return f"{self.vote_type} от {self.user_id} Голос за комментарий {self.comment.id}"
 
 
 class Link(models.Model):
