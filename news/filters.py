@@ -1,7 +1,7 @@
 # filters.py
 import django_filters
 from django_filters import rest_framework as filters
-from .models import News, Tag, Comment, Quote, Subscriber
+from .models import News, Comment, Subscriber
 
 class NewsFilter(filters.FilterSet):
     category = filters.CharFilter(lookup_expr='icontains')
