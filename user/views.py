@@ -45,7 +45,6 @@ class ConfirmCodeView(APIView):
             try:
                 user = User.objects.get(phone_number=phone_number, confirmation_code=confirmation_code)
                 user.is_active = True
-                print(user.is_active)
                 user.confirmation_code = ''
                 user.save()
                 return Response({'detail': 'Account confirmed.'}, status=status.HTTP_200_OK)
