@@ -6,10 +6,8 @@ from .serializers import UserRegistrationSerializer, ConfirmCodeSerializer
 import random
 from django.conf import settings
 from twilio.rest import Client
-import logging
 
 User = get_user_model()
-logger = logging.getLogger(__name__)
 
 class UserRegistrationView(APIView):
     def post(self, request, *args, **kwargs):
@@ -44,16 +42,13 @@ class ConfirmCodeView(APIView):
         if serializer.is_valid():
             phone_number = serializer.validated_data['phone_number']
             confirmation_code = serializer.validated_data['confirmation_code']
-            logger.debug(f'Phone number: {phone_number}, Confirmation code: {confirmation_code}')
             try:
                 user = User.objects.get(phone_number=phone_number, confirmation_code=confirmation_code)
                 user.is_active = True
-                logger.debug(f'User {user.phone_number} is_active before save: {user.is_active}')
+                print(user.is_active)
                 user.confirmation_code = ''
                 user.save()
-                logger.debug(f'User {user.phone_number} is_active after save: {user.is_active}')
                 return Response({'detail': 'Account confirmed.'}, status=status.HTTP_200_OK)
             except User.DoesNotExist:
-                logger.error(f'Invalid code or phone number. Phone number: {phone_number}, Confirmation code: {confirmation_code}')
                 return Response({'detail': 'Invalid code or phone number.'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
