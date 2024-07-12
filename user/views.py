@@ -1,6 +1,5 @@
-from rest_framework import status
+from rest_framework import mixins, viewsets, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
 from .serializers import UserRegistrationSerializer, ConfirmCodeSerializer
 import random
@@ -9,17 +8,21 @@ from twilio.rest import Client
 
 User = get_user_model()
 
-class UserRegistrationView(APIView):
-    def post(self, request, *args, **kwargs):
-        serializer = UserRegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            confirmation_code = ''.join(random.choices('0123456789', k=6))
-            user.confirmation_code = confirmation_code
-            user.save()
-            send_confirmation_code(user.phone_number, confirmation_code)
-            return Response({'detail': 'User registered. Confirmation code sent.'}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class UserRegistrationViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                              mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserRegistrationSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        confirmation_code = ''.join(random.choices('0123456789', k=6))
+        user.confirmation_code = confirmation_code
+        user.save()
+        send_confirmation_code(user.phone_number, confirmation_code)
+        headers = self.get_success_headers(serializer.data)
+        return Response({'detail': 'User registered. Confirmation code sent.'}, status=status.HTTP_201_CREATED, headers=headers)
 
 def send_confirmation_code(phone_number, confirmation_code):
     account_sid = settings.TWILIO_ACCOUNT_SID
@@ -36,18 +39,19 @@ def send_confirmation_code(phone_number, confirmation_code):
 
     return message.sid
 
-class ConfirmCodeView(APIView):
-    def post(self, request, *args, **kwargs):
-        serializer = ConfirmCodeSerializer(data=request.data)
-        if serializer.is_valid():
-            phone_number = serializer.validated_data['phone_number']
-            confirmation_code = serializer.validated_data['confirmation_code']
-            try:
-                user = User.objects.get(phone_number=phone_number, confirmation_code=confirmation_code)
-                user.is_active = True
-                user.confirmation_code = ''
-                user.save()
-                return Response({'detail': 'Account confirmed.'}, status=status.HTTP_200_OK)
-            except User.DoesNotExist:
-                return Response({'detail': 'Invalid code or phone number.'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class ConfirmCodeViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    serializer_class = ConfirmCodeSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        phone_number = serializer.validated_data['phone_number']
+        confirmation_code = serializer.validated_data['confirmation_code']
+        try:
+            user = User.objects.get(phone_number=phone_number, confirmation_code=confirmation_code)
+            user.is_active = True
+            user.confirmation_code = ''
+            user.save()
+            return Response({'detail': 'Account confirmed.'}, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'detail': 'Invalid code or phone number.'}, status=status.HTTP_400_BAD_REQUEST)

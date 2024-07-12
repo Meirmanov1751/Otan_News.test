@@ -1,7 +1,11 @@
-from django.urls import path
-from .views import UserRegistrationView, ConfirmCodeView
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import UserRegistrationViewSet, ConfirmCodeViewSet
+
+router = DefaultRouter()
+router.register(r'auth/register', UserRegistrationViewSet, basename='user-registration')
+router.register(r'auth/confirm_code', ConfirmCodeViewSet, basename='confirm-code')
 
 urlpatterns = [
-    path('auth/register/', UserRegistrationView.as_view(), name='user-registration'),
-    path('auth/confirm_code/', ConfirmCodeView.as_view(), name='confirm-code'),
+    path('', include(router.urls)),
 ]
