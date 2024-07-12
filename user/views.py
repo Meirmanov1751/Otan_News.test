@@ -39,7 +39,8 @@ def send_confirmation_code(phone_number, confirmation_code):
 
     return message.sid
 
-class ConfirmCodeViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class ConfirmCodeViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                              mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     serializer_class = ConfirmCodeSerializer
 
     def create(self, request, *args, **kwargs):
