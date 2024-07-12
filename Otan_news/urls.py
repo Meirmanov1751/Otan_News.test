@@ -14,6 +14,7 @@ from rest_framework import permissions
 
 from django.conf import settings
 
+from user.urls import urlpatterns as custom_urlpatterns
 from language.urls import router as post_language
 from news.sitemaps import NewsSitemap
 from news.urls import router as post_news
@@ -22,6 +23,7 @@ from tags.urls import router as post_tags
 from quote.urls import router as post_quote
 
 router = DefaultRouter()
+# router.registry.extend(custom_urlpatterns.registry)
 router.registry.extend(post_language.registry)
 router.registry.extend(post_news.registry)
 router.registry.extend(post_tags.registry)
@@ -55,5 +57,6 @@ urlpatterns = [
                   path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
                   path('admin/', admin.site.urls),
                   path('api/', include(router.urls)),
+                  path('', include(custom_urlpatterns)),
                   path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

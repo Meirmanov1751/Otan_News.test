@@ -4,20 +4,15 @@ from djoser.signals import user_registered
 from django.dispatch import receiver
 import random
 
-
 @receiver(user_registered)
 def handle_user_registered(sender, user, request, **kwargs):
-    # try:
-        profile = user
-        if profile:
-            confirmation_code = ''.join(random.choices('0123456789', k=6))
-            profile.confirmation_code = confirmation_code
-            profile.save()
-            print(profile)
-            print(profile.phone_number)
-            send_confirmation_code(profile.phone_number, confirmation_code)
-    # except:
-    #     pass
+    profile = user
+    if profile:
+        confirmation_code = ''.join(random.choices('0123456789', k=6))
+        profile.confirmation_code = confirmation_code
+        profile.is_active = False  # Пользователь не активен до подтверждения
+        profile.save()
+        send_confirmation_code(profile.phone_number, confirmation_code)
 
 def send_confirmation_code(phone_number, confirmation_code):
     account_sid = settings.TWILIO_ACCOUNT_SID
