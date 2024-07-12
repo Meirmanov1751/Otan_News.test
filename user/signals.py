@@ -7,7 +7,7 @@ import random
 
 @receiver(user_registered)
 def handle_user_registered(sender, user, request, **kwargs):
-    try:
+    # try:
         profile = user
         if profile:
             confirmation_code = ''.join(random.choices('0123456789', k=6))
@@ -16,8 +16,8 @@ def handle_user_registered(sender, user, request, **kwargs):
             print(profile)
             print(profile.phone_number)
             send_confirmation_code(profile.phone_number, confirmation_code)
-    except:
-        pass
+    # except:
+    #     pass
 
 def send_confirmation_code(phone_number, confirmation_code):
     account_sid = settings.TWILIO_ACCOUNT_SID
