@@ -44,7 +44,6 @@ class ConfirmCodeView(APIView):
             confirmation_code = serializer.validated_data['confirmation_code']
             try:
                 user = User.objects.get(phone_number=phone_number, confirmation_code=confirmation_code)
-                print(user.is_active)
                 user.is_active = True
                 user.confirmation_code = ''
                 user.save()
