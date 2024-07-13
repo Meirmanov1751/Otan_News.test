@@ -18,4 +18,4 @@ RUN pip install -r requirements.txt
 # Скопируйте остальные файлы проекта
 COPY . /app
 RUN python manage.py collectstatic --no-input
-COPY backup.sh /app/backup.sh
+

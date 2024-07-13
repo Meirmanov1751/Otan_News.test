@@ -2,14 +2,14 @@ version: '3.9'
 
 services:
   pgdb:
-    image: postgres:13  # Используем версию 13 PostgreSQL
+    image: postgres:latest
     container_name: pgdb
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=Otan_News
+      - POSTGRES_USER=admin@admin.kz
+      - POSTGRES_PASSWORD=qazaqway123
     networks:
       - app_network
     volumes:
@@ -24,18 +24,17 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - pgdb  # Зависимость от контейнера PostgreSQL
+      - pgdb
     environment:
       - POSTGRES_HOST=pgdb
       - POSTGRES_PORT=5432
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=Otan_News
+      - POSTGRES_USER=admin@admin.kz
+      - POSTGRES_PASSWORD=qazaqway123
     networks:
       - app_network
     tmpfs:
       - /static
-
 
   redis:
     image: redis:6.2
@@ -90,9 +89,21 @@ services:
     networks:
       - app_network
 
+  backup:
+    image: postgres:latest
+    command: [ "bash", "-c", "pg_dump -U admin@admin.kz -d Otan_News > /backups/$(date +\%Y-\%m-\%d_\%H-\%M-\%S)_backup.sql" ]
+    volumes:
+      - ./backups:/backups
+    depends_on:
+      - pgdb
+    networks:
+      - app_network
+    restart: unless-stopped
+
 networks:
   app_network:
     driver: bridge
 
 volumes:
   postgres_data:
+
