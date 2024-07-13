@@ -10,6 +10,7 @@ services:
       - POSTGRES_DB=Otan_News
       - POSTGRES_USER=admin@admin.kz
       - POSTGRES_PASSWORD=qazaqway123
+      - TZ=Asia/Almaty
     networks:
       - app_network
     volumes:
@@ -98,6 +99,8 @@ services:
       - ./backups:/backups
     depends_on:
       - pgdb
+    environment:
+      - TZ=Asia/Almaty
     networks:
       - app_network
     restart: unless-stopped
