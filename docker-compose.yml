@@ -91,7 +91,7 @@ services:
 
   backup:
     image: postgres:latest
-    command: ["bash", "-c", "while true; do pg_dump -U admin@admin.kz -d Otan_News > /backups/$(date +'%Y-%m-%d_%H-%M-%S')_backup.sql; sleep 24h; done"]
+    command: ["bash", "-c", "while true; do pg_dump -U admin@admin.kz -d Otan_News > /backups/$$(date +'%Y-%m-%d_%H-%M-%S')_backup.sql; sleep 24h; done"]
     volumes:
       - ./backups:/backups
     depends_on:
