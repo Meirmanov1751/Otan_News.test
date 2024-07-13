@@ -3,7 +3,7 @@ from django.conf import settings
 from .models import Subscriber
 
 def notify_subscribers(news):
-
+    try:
         print("notify_subscribers")
         subscribers = Subscriber.objects.all()
         subject = 'New Post Notification'
@@ -14,3 +14,5 @@ def notify_subscribers(news):
         print(recipient_list)
 
         send_mail(subject, message, from_email, recipient_list)
+    except:
+        print("except")
