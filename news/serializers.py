@@ -34,6 +34,11 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = '__all__'
 
+class CommentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
 
 class NewsSerializer(serializers.ModelSerializer):
     translations = NewsTranslationSerializer(many=True, read_only=True)

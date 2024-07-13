@@ -5,7 +5,7 @@ from rest_framework import mixins, viewsets
 from rest_framework.response import Response
 from rest_framework import viewsets
 from .models import News, Comment
-from .serializers import NewsSerializer, CommentSerializer, NewsShortSerializer
+from .serializers import NewsSerializer, CommentSerializer, NewsShortSerializer, CommentCreateSerializer
 from .filters import NewsFilter, CommentFilter, SubscriberFilter
 
 logger = logging.getLogger('comments')
@@ -32,6 +32,15 @@ class CommentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retr
                    mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+    def perform_create(self, serializer):
+        comment = serializer.save()
+        logger.info(f'New comment added by {comment.user.first_name} on news {comment.news.id}')
+
+class CommentCreateViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                   mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentCreateSerializer
 
     def perform_create(self, serializer):
         comment = serializer.save()
