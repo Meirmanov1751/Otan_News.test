@@ -1,3 +1,4 @@
+import logging
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, viewsets
@@ -7,7 +8,7 @@ from .models import News, Comment
 from .serializers import NewsSerializer, CommentSerializer, NewsShortSerializer
 from .filters import NewsFilter, CommentFilter, SubscriberFilter
 
-
+logger = logging.getLogger('comments')
 class NewsViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
                    mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = News.objects.all()
@@ -32,5 +33,7 @@ class CommentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retr
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
-
+    def perform_create(self, serializer):
+        comment = serializer.save()
+        logger.info(f'New comment added by {comment.user.username} on news {comment.news.id}')
 

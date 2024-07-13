@@ -1,3 +1,4 @@
+import logging
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,7 +9,7 @@ from django.conf import settings
 from twilio.rest import Client
 
 User = get_user_model()
-
+logger = logging.getLogger('registration')
 class UserRegistrationView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = UserRegistrationSerializer(data=request.data)
@@ -18,6 +19,7 @@ class UserRegistrationView(APIView):
             user.confirmation_code = confirmation_code
             user.save()
             send_confirmation_code(user.phone_number, confirmation_code)
+            logger.info(f'New user registered: {user.first_name} (phone: {user.phone_number})')
             return Response({'detail': 'User registered. Confirmation code sent.'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -47,6 +49,7 @@ class ConfirmCodeView(APIView):
                 user.is_active = True
                 user.confirmation_code = ''
                 user.save()
+                logger.info(f'User confirmed: {user.first_name} (phone: {user.phone_number})')
                 return Response({'detail': 'Account confirmed.'}, status=status.HTTP_200_OK)
             except User.DoesNotExist:
                 return Response({'detail': 'Invalid code or phone number.'}, status=status.HTTP_400_BAD_REQUEST)

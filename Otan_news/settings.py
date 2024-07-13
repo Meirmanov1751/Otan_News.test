@@ -23,25 +23,44 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-1leu%4qcxx^80d&&7o^*(5zw4e7al774*auu^ckn1t99m)wd!)'
 
-
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'file': {
-#             'level': 'DEBUG',
-#             'class': 'logging.FileHandler',
-#             'filename': '/logs/debug.log',
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['file'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#     },
-# }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': 7,
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'registration': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'comments': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -81,7 +100,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://185.129.51.236:1337',
     'https://185.129.51.236:1337',
     'http://185.129.51.236',
-    'https://185.129.51.236',]
+    'https://185.129.51.236', ]
 # Application definition
 
 INSTALLED_APPS = [
@@ -194,7 +213,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Almaty'
 
 USE_I18N = True
 
@@ -213,7 +232,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'user.User'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'media')
-
 
 REST_FRAMEWORK = {
     # Use Django's standard django.contrib.auth permissions,
@@ -248,7 +266,6 @@ DJOSER = {
     'SEND_CONFIRMATION_SMS': True,
 }
 
-
 # Redis settings
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
@@ -270,7 +287,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'kassymovd00@gmail.com'
 EMAIL_HOST_PASSWORD = 'qazaqway1'
 
-
 # BE8CCUTHDCXW7GQKX9FBXV5X
 
 TWILIO_ACCOUNT_SID = 'AC585b5f0968aeda2778f75bbda2b5fdf8'
@@ -278,4 +294,3 @@ TWILIO_AUTH_TOKEN = 'caa5bad151495b9509991e0d454df4fa'
 TWILIO_PHONE_NUMBER = '+12248033751'
 
 SITE_ID = 1
-
