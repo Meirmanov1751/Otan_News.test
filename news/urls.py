@@ -5,5 +5,5 @@ router = DefaultRouter()
 
 router.register('news', NewsViewSet, basename='news')
 router.register('news_short', NewsShortViewSet, basename='news_short')
-router.register(r'comments', CommentViewSet)
-router.register(r'commentsCreate', CommentCreateViewSet)
+router.register(r'comments', CommentViewSet, basename='comments')
+router.register(r'commentsCreate', CommentCreateViewSet, basename='commentsCreate')
