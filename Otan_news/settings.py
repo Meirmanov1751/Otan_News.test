@@ -72,12 +72,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-CORS_ALLOWED_ORIGINS = [
-    'http://185.129.51.236:1337',
-    'https://185.129.51.236:1337',
-    'http://185.129.51.236',
-    'https://185.129.51.236',
-]
+# CORS_ALLOWED_ORIGINS = [
+#     'http://185.129.51.236:1337',
+#     'https://185.129.51.236:1337',
+#     'http://185.129.51.236',
+#     'https://185.129.51.236',
+# ]
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
@@ -101,11 +101,13 @@ CORS_ALLOW_HEADERS = [
     "x-requested-with",
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://185.129.51.236:1337',
-    'https://185.129.51.236:1337',
-    'http://185.129.51.236',
-    'https://185.129.51.236', ]
+# CSRF_TRUSTED_ORIGINS = [
+#     'http://185.129.51.236:1337',
+#     'https://185.129.51.236:1337',
+#     'http://185.129.51.236',
+#     'https://185.129.51.236', ]
+
+CSRF_TRUSTED_ORIGINS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
