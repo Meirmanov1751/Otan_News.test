@@ -44,5 +44,5 @@ class CommentCreateViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixin
 
     def perform_create(self, serializer):
         comment = serializer.save()
-        logger.info(f'New comment added by {comment.user.first_name} on news {comment.news.id}')
+        logger.info(f'New comment {comment.comment}')
 
