@@ -72,18 +72,18 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-# CORS_ALLOWED_ORIGINS = [
-#     'http://185.129.51.236:1337',
-#     'https://185.129.51.236:1337',
-#     'http://185.129.51.236',
-#     'https://185.129.51.236',
-#     'http://localhost:5173',
-#     'https://localhost:5173',
-#     'http://localhost:3000',
-#     'https://localhost:3000',
-# ]
+CORS_ALLOWED_ORIGINS = [
+    'http://185.129.51.236:1337',
+    'https://185.129.51.236:1337',
+    'http://185.129.51.236',
+    'https://185.129.51.236',
+    'http://localhost:5173',
+    'https://localhost:5173',
+    'http://localhost:3000',
+    'https://localhost:3000',
+]
 
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = [
     "DELETE",
