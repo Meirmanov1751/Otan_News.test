@@ -30,11 +30,11 @@ class LinkSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    user_id = UserSerializer(read_only=True)
 
     class Meta:
         model = Comment
-        fields = ['id', 'comment', 'user', 'news', 'created_at']
+        fields = ['id', 'comment', 'user_id', 'news', 'created_at']
 
 
 class CommentCreateSerializer(serializers.ModelSerializer):
