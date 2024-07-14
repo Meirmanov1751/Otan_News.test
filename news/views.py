@@ -37,10 +37,6 @@ class CommentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retr
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
-    def perform_create(self, serializer):
-        comment = serializer.save()
-        logger.info(f'New comment added by {comment.user.first_name} on news {comment.news.id}')
-
 
 class CommentCreateViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
                            mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
