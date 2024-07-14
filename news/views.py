@@ -9,8 +9,10 @@ from .serializers import NewsSerializer, CommentSerializer, NewsShortSerializer,
 from .filters import NewsFilter, CommentFilter, SubscriberFilter
 
 logger = logging.getLogger('comments')
+
+
 class NewsViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+                  mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
     filter_backends = [DjangoFilterBackend]
@@ -23,13 +25,15 @@ class NewsViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retriev
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
+
 class NewsShortViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+                       mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = News.objects.all()
     serializer_class = NewsShortSerializer
 
+
 class CommentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+                     mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
@@ -37,12 +41,12 @@ class CommentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retr
         comment = serializer.save()
         logger.info(f'New comment added by {comment.user.first_name} on news {comment.news.id}')
 
+
 class CommentCreateViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+                           mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentCreateSerializer
 
     def perform_create(self, serializer):
         comment = serializer.save()
         logger.info(f'New comment {comment.comment}')
-

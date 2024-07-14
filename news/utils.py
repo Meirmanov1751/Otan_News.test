@@ -2,6 +2,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import Subscriber
 
+
 def notify_subscribers(news):
     try:
         print("notify_subscribers")

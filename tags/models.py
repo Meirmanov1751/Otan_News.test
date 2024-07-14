@@ -1,11 +1,14 @@
 from django.db import models
 from language.models import Language
+
+
 # Create your models here.
 class Tag(models.Model):
     tag_name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.tag_name
+
 
 class TagTranslation(models.Model):
     tag = models.CharField(max_length=255)
@@ -17,4 +20,3 @@ class TagTranslation(models.Model):
 
     def __str__(self):
         return f"Тег {self.tag_id.id} ({self.lang})"
-

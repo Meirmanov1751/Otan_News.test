@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from .models import News
 from .utils import notify_subscribers
 
+
 @receiver(post_save, sender=News)
 def post_save_handler(sender, instance, created, **kwargs):
     print("рассылка")

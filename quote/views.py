@@ -15,7 +15,8 @@ class QuoteViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retrie
     filter_backends = [DjangoFilterBackend]
     filterset_class = QuoteFilter
 
+
 class QuoteTranslationViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+                              mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = QuoteTranslation.objects.all()
     serializer_class = QuoteTranslationSerializer

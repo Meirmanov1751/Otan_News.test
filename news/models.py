@@ -50,7 +50,6 @@ class NewsTranslation(models.Model):
     title = models.CharField(max_length=255)
     text = models.TextField()
 
-
     class Meta:
         unique_together = ('news', 'lang')
         ordering = ["id"]
@@ -133,7 +132,6 @@ class Subscriber(models.Model):
 
     def __str__(self):
         return self.email
-
 
     class Meta:
         ordering = ["id"]

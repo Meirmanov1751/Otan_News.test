@@ -8,6 +8,7 @@ admin.site.register(Subscriber)
 admin.site.register(Comment)
 admin.site.register(VoteComment)
 
+
 class LinkInline(admin.TabularInline):
     model = Link
     extra = 1

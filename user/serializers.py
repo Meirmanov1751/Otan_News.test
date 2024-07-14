@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -23,9 +24,12 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+
 class ConfirmCodeSerializer(serializers.Serializer):
     phone_number = serializers.CharField()
     confirmation_code = serializers.CharField()
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()

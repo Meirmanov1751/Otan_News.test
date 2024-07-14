@@ -1,6 +1,7 @@
 from django.contrib.sitemaps import Sitemap
 from .models import News, Comment
 
+
 class NewsSitemap(Sitemap):
     changefreq = 'daily'
     priority = 0.9
@@ -13,6 +14,7 @@ class NewsSitemap(Sitemap):
 
     def location(self, obj):
         return obj.get_absolute_url()
+
 
 class CommentSitemap(Sitemap):
     changefreq = 'daily'

@@ -1,18 +1,3 @@
-# import redis
-# from django.conf import settings
-# from smsc import SMSC
-#
-# redis_client = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB)
-#
-# def send_sms_verification(phone_number, verification_code):
-#     smsc = SMSC()
-#     result = smsc.send_sms(phone_number, f'Your verification code is {verification_code}')
-#     return result
-#
-# def save_verification_code(phone_number, verification_code):
-#     redis_client.set(phone_number, verification_code, ex=300)
-#
-
 from django.conf import settings
 from twilio.rest import Client
 from django.http import HttpResponse

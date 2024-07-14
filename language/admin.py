@@ -7,6 +7,3 @@ from .models import (
 @admin.register(Language)
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ('id', 'lang')
-
-
-

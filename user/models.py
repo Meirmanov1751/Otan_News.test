@@ -44,6 +44,7 @@ class User(AbstractBaseUser):
             (GUEST, 'Гость'),
             (JOURNALIST, 'Журналисты'),
         )
+
     avatar = models.ImageField(upload_to='avatars/%Y')
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)

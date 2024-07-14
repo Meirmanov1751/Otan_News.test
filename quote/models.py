@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 from language.models import Language
+
+
 # Create your models here.
 class Quote(models.Model):
     quote_author = models.CharField(max_length=255)
@@ -15,6 +17,7 @@ class Quote(models.Model):
         ordering = ["id"]
         verbose_name = "Цитата"
         verbose_name_plural = "Цитаты"
+
 
 class QuoteTranslation(models.Model):
     quote = models.TextField()
