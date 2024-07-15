@@ -48,7 +48,7 @@ class User(AbstractBaseUser):
     avatar = models.ImageField(upload_to='avatars/%Y')
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    phone_number = models.CharField(unique=True, max_length=15)
+    phone_number = models.CharField(max_length=15)
     confirmation_code = models.CharField(max_length=6, blank=True, null=True)
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=20, choices=ROLES.ROLES_CHOICES,

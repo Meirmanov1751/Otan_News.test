@@ -9,7 +9,7 @@ import random
 def handle_user_registered(sender, user, request, **kwargs):
     profile = user
     if profile:
-        confirmation_code = ''.join(random.choices('0123456789', k=6))
+        confirmation_code = ''.join(random.choices('0123456789', k=4))
         profile.confirmation_code = confirmation_code
         profile.is_active = False  # Пользователь не активен до подтверждения
         profile.save()

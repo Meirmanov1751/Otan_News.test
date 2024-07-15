@@ -15,7 +15,7 @@ class UserRegistrationView(APIView):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            confirmation_code = ''.join(random.choices('0123456789', k=6))
+            confirmation_code = ''.join(random.choices('0123456789', k=4))
             user.confirmation_code = confirmation_code
             user.save()
             send_confirmation_code(user.phone_number, confirmation_code)
