@@ -22,6 +22,37 @@ class News(models.Model):
             (BY_EAR, 'На слуху'),
         )
 
+    class SUBCATEGORYS:
+        KAZAKHSTAN_NEWS = 'Новости Казахстана'
+        MANGYSTAU_NEWS = 'Новости Мангистау'
+        WORLD_NEWS = 'Мировые новости'
+        PRESIDENT = 'Президент'
+        MEETINGS = 'Встречи'
+        ECONOMY = 'Экономика'
+        SPORT = 'Спорт'
+        ECOLOGY = 'Экология'
+        MEDICINE = 'Медицина'
+        EDUCATION = 'Образование'
+        CULTURE = 'Культура'
+        TRUTH = 'Правда'
+        YOUTH = 'Молодежь'
+
+        SUBCATEGORY_CHOICES = (
+            (KAZAKHSTAN_NEWS, 'Новости Казахстана'),
+            (MANGYSTAU_NEWS, 'Новости Мангистау'),
+            (WORLD_NEWS, 'Мировые новости'),
+            (PRESIDENT, 'Президент'),
+            (MEETINGS, 'Встречи'),
+            (ECONOMY, 'Экономика'),
+            (SPORT, 'Спорт'),
+            (ECOLOGY, 'Экология'),
+            (MEDICINE, 'Медицина'),
+            (EDUCATION, 'Образование'),
+            (CULTURE, 'Культура'),
+            (TRUTH, 'Правда'),
+            (YOUTH, 'Молодежь'),
+        )
+
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     created_at = models.DateTimeField(auto_now_add=True)
     quote = models.ForeignKey(Quote, on_delete=models.SET_NULL, null=True, blank=True)
@@ -30,6 +61,9 @@ class News(models.Model):
     tags = models.ManyToManyField(Tag, through='NewsTag', related_name='news_tags')
     category = models.CharField(max_length=20, choices=CATEGORYS.CATEGORY_CHOICES,
                                 default=CATEGORYS.NEWS)
+    subcategory = models.CharField(max_length=50, choices=SUBCATEGORYS.SUBCATEGORY_CHOICES,
+                                   blank=True, null=True)
+    exclusive = models.BooleanField(default=False)
     views = models.PositiveIntegerField(default=0)
 
     def __str__(self):
@@ -42,7 +76,6 @@ class News(models.Model):
         ordering = ["id"]
         verbose_name = "Новость"
         verbose_name_plural = "Новости"
-
 
 class NewsTranslation(models.Model):
     news = models.ForeignKey(News, related_name='translations', on_delete=models.CASCADE)

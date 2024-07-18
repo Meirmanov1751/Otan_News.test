@@ -18,6 +18,19 @@ class NewsViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retriev
     filter_backends = [DjangoFilterBackend]
     filterset_class = NewsFilter
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        limit = self.request.query_params.get('limit')
+        order_by = self.request.query_params.get('order_by')
+
+        if order_by:
+            queryset = queryset.order_by(order_by)
+
+        if limit:
+            queryset = queryset[:int(limit)]
+
+        return queryset
+
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.views += 1  # Увеличиваем количество просмотров
