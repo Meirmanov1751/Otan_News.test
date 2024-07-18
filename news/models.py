@@ -8,11 +8,11 @@ from language.models import Language
 
 class News(models.Model):
     class CATEGORYS:
-        NEWS = 'Новости'
-        POLICY = 'Политика'
-        SOCIETY = 'Общество'
-        ADVERTISING = 'Реклама'
-        BY_EAR = 'На слуху'
+        NEWS = 'News'
+        POLICY = 'Policy'
+        SOCIETY = 'Society'
+        ADVERTISING = 'Advertising'
+        BY_EAR = 'By hearing'
 
         CATEGORY_CHOICES = (
             (NEWS, 'Новости'),
@@ -23,19 +23,19 @@ class News(models.Model):
         )
 
     class SUBCATEGORYS:
-        KAZAKHSTAN_NEWS = 'Новости Казахстана'
-        MANGYSTAU_NEWS = 'Новости Мангистау'
-        WORLD_NEWS = 'Мировые новости'
-        PRESIDENT = 'Президент'
-        MEETINGS = 'Встречи'
-        ECONOMY = 'Экономика'
-        SPORT = 'Спорт'
-        ECOLOGY = 'Экология'
-        MEDICINE = 'Медицина'
-        EDUCATION = 'Образование'
-        CULTURE = 'Культура'
-        TRUTH = 'Правда'
-        YOUTH = 'Молодежь'
+        KAZAKHSTAN_NEWS = 'Kazakhstan News'
+        MANGYSTAU_NEWS = 'Mangystau News'
+        WORLD_NEWS = 'World News'
+        PRESIDENT = 'President'
+        MEETINGS = 'Meetings'
+        ECONOMY = 'Economy'
+        SPORT = 'Sport'
+        ECOLOGY = 'Ecology'
+        MEDICINE = 'Medicine'
+        EDUCATION = 'Education'
+        CULTURE = 'Culture'
+        TRUTH = 'True'
+        YOUTH = 'Youth'
 
         SUBCATEGORY_CHOICES = (
             (KAZAKHSTAN_NEWS, 'Новости Казахстана'),
@@ -59,10 +59,8 @@ class News(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to='news/images/', blank=True, null=True)
     tags = models.ManyToManyField(Tag, through='NewsTag', related_name='news_tags')
-    category = models.CharField(max_length=20, choices=CATEGORYS.CATEGORY_CHOICES,
-                                default=CATEGORYS.NEWS)
-    subcategory = models.CharField(max_length=50, choices=SUBCATEGORYS.SUBCATEGORY_CHOICES,
-                                   blank=True, null=True)
+    category = models.CharField(max_length=20, choices=CATEGORYS.CATEGORY_CHOICES)
+    subcategory = models.CharField(max_length=50, choices=SUBCATEGORYS.SUBCATEGORY_CHOICES)
     exclusive = models.BooleanField(default=False)
     views = models.PositiveIntegerField(default=0)
 
