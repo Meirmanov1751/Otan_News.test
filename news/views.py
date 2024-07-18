@@ -43,6 +43,21 @@ class NewsShortViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Re
                        mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = News.objects.all()
     serializer_class = NewsShortSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = NewsFilter
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        limit = self.request.query_params.get('limit')
+        order_by = self.request.query_params.get('order_by')
+
+        if order_by:
+            queryset = queryset.order_by(order_by)
+
+        if limit:
+            queryset = queryset[:int(limit)]
+
+        return queryset
 
 
 class CommentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
