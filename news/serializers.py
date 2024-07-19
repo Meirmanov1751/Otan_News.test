@@ -50,6 +50,13 @@ class NewsSerializer(serializers.ModelSerializer):
     quote = QuoteSerializer(read_only=True)
     author = UserSerializer(read_only=True)
     links = LinkSerializer(many=True, read_only=True)
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, obj):
+        request = self.context.get('request')
+        if obj.image and request:
+            return request.build_absolute_uri(obj.image.url)
+        return None
 
     class Meta:
         model = News
