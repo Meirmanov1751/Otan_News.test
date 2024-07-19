@@ -106,7 +106,7 @@ CORS_ALLOW_HEADERS = [
 
 CSRF_TRUSTED_ORIGINS = [
     'https://otpannews.kz',
-    'http://otpannews.kz:8443',
+    'https://otpannews.kz:8443',
     'https://www.otpannews.kz',
     'https://api.otpannews.kz'
     'http://185.129.51.236',
