@@ -55,7 +55,7 @@ class NewsSerializer(serializers.ModelSerializer):
     def get_image(self, obj):
         request = self.context.get('request')
         if obj.image:
-            return f"http://{request.get_host().split(':')[0]}:1337{obj.image.url}"
+            return f"https://{request.get_host().split(':')[0]}:8443{obj.image.url}"
         return None
 
     class Meta:
