@@ -61,10 +61,11 @@ services:
   nginx:
     build: ./nginx
     volumes:
-      - .:/app
       - /root/django_backend/Otan_News.test/nginx/nginx.conf:/etc/nginx/nginx.conf
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/lib/letsencrypt:/var/lib/letsencrypt
+      - /root/django_backend/Otan_News.test/static:/app/static
+      - /root/django_backend/Otan_News.test/media:/app/media
     ports:
       - "1337:80"
       - "1443:443"
@@ -72,7 +73,6 @@ services:
       - django
     networks:
       - app_network
-
 
   celery:
     build: .
@@ -118,9 +118,7 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/lib/letsencrypt:/var/lib/letsencrypt
       - /root/django_backend/Otan_News.test/data/certbot/www:/var/www/certbot
-    entrypoint: /bin/sh -c 'trap exit TERM; while :; do sleep 6h & wait $${!}; certbot renew; done;'
-
-
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 6h & wait $${!}; certbot renew; done;'"
 
 networks:
   app_network:
