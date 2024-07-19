@@ -66,8 +66,8 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/lib/letsencrypt:/var/lib/letsencrypt
     ports:
-      - "80:80"
-      - "443:443"
+    - "80:80"
+    - "8443:8443"
     depends_on:
       - django
     networks:
