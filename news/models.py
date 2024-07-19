@@ -60,7 +60,7 @@ class News(models.Model):
     image = models.ImageField(upload_to='news/images/', blank=True, null=True)
     tags = models.ManyToManyField(Tag, through='NewsTag', related_name='news_tags')
     category = models.CharField(max_length=20, choices=CATEGORYS.CATEGORY_CHOICES)
-    subcategory = models.CharField(max_length=50, choices=SUBCATEGORYS.SUBCATEGORY_CHOICES)
+    subcategory = models.CharField(max_length=50, choices=SUBCATEGORYS.SUBCATEGORY_CHOICES, blank=True, null=True)
     exclusive = models.BooleanField(default=False)
     views = models.PositiveIntegerField(default=0)
 
