@@ -55,7 +55,10 @@ class NewsSerializer(serializers.ModelSerializer):
     def get_image(self, obj):
         request = self.context.get('request')
         if obj.image and request:
-            return request.build_absolute_uri(obj.image.url)
+            # Получаем схему и хост из запроса
+            scheme = request.scheme
+            host = request.get_host()
+            return f"{scheme}://{host}{obj.image.url}"
         return None
 
     class Meta:
