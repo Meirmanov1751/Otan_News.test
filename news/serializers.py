@@ -57,6 +57,7 @@ class NewsSerializer(serializers.ModelSerializer):
         if obj.image and request:
             scheme = request.scheme
             host = request.get_host()
+            # Отладочные сообщения
             print(f"Scheme: {scheme}, Host: {host}, URL: {obj.image.url}")
             return f"{scheme}://{host}{obj.image.url}"
         return None
