@@ -105,7 +105,16 @@ CORS_ALLOW_HEADERS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    '*'
+    'https://otpannews.kz',
+    'http://otpannews.kz:8443',
+    'https://www.otpannews.kz',
+    'https://api.otpannews.kz'
+    'http://185.129.51.236',
+    'https://185.129.51.236',
+    'http://localhost:5173',
+    'https://localhost:5173',
+    'http://localhost:3000',
+    'https://localhost:3000',
 ]
 # Application definition
 
