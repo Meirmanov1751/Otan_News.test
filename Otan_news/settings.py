@@ -105,14 +105,7 @@ CORS_ALLOW_HEADERS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://185.129.51.236:1337',
-    'https://185.129.51.236:1337',
-    'http://185.129.51.236',
-    'https://185.129.51.236',
-    'http://localhost:5173',
-    'https://localhost:5173',
-    'http://localhost:3000',
-    'https://localhost:3000',
+    '*'
 ]
 # Application definition
 
