@@ -68,8 +68,8 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/lib/letsencrypt:/var/lib/letsencrypt
     ports:
-      - "1337:1337"
-      - "443:443"
+      - "1337:80"
+      - "1443:443"
     depends_on:
       - django
     networks:
@@ -121,6 +121,7 @@ services:
       - /var/lib/letsencrypt:/var/lib/letsencrypt
       - ./data/certbot/www:/var/www/certbot
     entrypoint: /bin/sh -c 'trap exit TERM; while :; do sleep 6h & wait $${!}; certbot renew; done;'
+
 
 
 networks:
