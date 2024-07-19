@@ -62,7 +62,7 @@ services:
     build: ./nginx
     volumes:
       - .:/app
-      - ./nginx.conf:/app/nginx/nginx.conf
+      - /root/django_backend/Otan_News.test/nginx/nginx.conf:/etc/nginx/nginx.conf
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/lib/letsencrypt:/var/lib/letsencrypt
     ports:
@@ -117,9 +117,8 @@ services:
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/lib/letsencrypt:/var/lib/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - /root/django_backend/Otan_News.test/data/certbot/www:/var/www/certbot
     entrypoint: /bin/sh -c 'trap exit TERM; while :; do sleep 6h & wait $${!}; certbot renew; done;'
-
 
 
 
