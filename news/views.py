@@ -63,6 +63,11 @@ class NewsShortViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Re
 
         return queryset
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
 
 class CommentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
                      mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):

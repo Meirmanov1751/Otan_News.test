@@ -54,12 +54,8 @@ class NewsSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         request = self.context.get('request')
-        if obj.image and request:
-            scheme = request.scheme
-            host = request.get_host()
-            # Отладочные сообщения
-            print(f"Scheme: {scheme}, Host: {host}, URL: {obj.image.url}")
-            return f"{scheme}://{host}{obj.image.url}"
+        if obj.image:
+            return f"http://{request.get_host().split(':')[0]}:1337{obj.image.url}"
         return None
 
     class Meta:
@@ -70,6 +66,13 @@ class NewsSerializer(serializers.ModelSerializer):
 class NewsShortSerializer(serializers.ModelSerializer):
     translations = NewsTranslationSerializer(many=True, read_only=True)
     author = UserSerializer(read_only=True)
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, obj):
+        request = self.context.get('request')
+        if obj.image:
+            return f"http://{request.get_host().split(':')[0]}:1337{obj.image.url}"
+        return None
 
     class Meta:
         model = News
