@@ -1,6 +1,7 @@
 import logging
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework import mixins, viewsets
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -10,6 +11,15 @@ from .filters import NewsFilter, CommentFilter, SubscriberFilter
 
 logger = logging.getLogger('comments')
 
+class NewsPagination(LimitOffsetPagination):
+    default_limit = None
+    max_limit = 100
+
+    def paginate_queryset(self, queryset, request, view=None):
+        limit = request.query_params.get('limit')
+        if limit is None:
+            return None
+        return super().paginate_queryset(queryset, request, view)
 
 class NewsViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
                   mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
@@ -17,17 +27,15 @@ class NewsViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retriev
     serializer_class = NewsSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = NewsFilter
+    pagination_class = NewsPagination
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        limit = self.request.query_params.get('limit')
         order_by = self.request.query_params.get('order_by')
 
         if order_by:
             queryset = queryset.order_by(order_by)
 
-        if limit:
-            queryset = queryset[:int(limit)]
 
         return queryset
 
@@ -49,17 +57,14 @@ class NewsShortViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Re
     serializer_class = NewsShortSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = NewsFilter
+    pagination_class = NewsPagination
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        limit = self.request.query_params.get('limit')
         order_by = self.request.query_params.get('order_by')
 
         if order_by:
             queryset = queryset.order_by(order_by)
-
-        if limit:
-            queryset = queryset[:int(limit)]
 
         return queryset
 
