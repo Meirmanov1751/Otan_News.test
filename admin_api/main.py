@@ -7,7 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI(
     title="FastAPI News Service",
     description="API for managing news articles and related content",
-    version="1.0.0"
+    version="1.0.0",
+    docs_url="/api/admin/docs"  # Путь для Swagger UI
 )
 
 app.add_middleware(
