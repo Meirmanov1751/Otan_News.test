@@ -115,6 +115,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://localhost:5173',
     'http://localhost:3000',
     'https://localhost:3000',
+    'https://localhost:8001',
+    'http://localhost:8001',
 ]
 # Application definition
 
