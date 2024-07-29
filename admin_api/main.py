@@ -24,7 +24,7 @@ app.add_middleware(
 app.include_router(categories.router, prefix="/categories", tags=["categories"])
 app.include_router(news.router, prefix="/news", tags=["News"])
 app.include_router(comments.router, prefix="/comments", tags=["Comments"])
-app.include_router(auth.router, prefix="/", tags=["auth"])
+app.include_router(auth.router, prefix="/auth", tags=["auth"])
 @app.get("/")
 async def root():
     return {"message": "Welcome to the FastAPI News Service!"}
