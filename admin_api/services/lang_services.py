@@ -2,6 +2,7 @@ from typing import List  # Import the List type
 from fastapi import HTTPException, status
 import httpx
 from admin_api.utils import http_client
+from typing import Optional
 
 DJANGO_API_URL = "http://django:8000/api/language"
 
