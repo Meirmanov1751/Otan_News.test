@@ -1,19 +1,18 @@
 from typing import List  # Add this import
 from fastapi import HTTPException, status
 import httpx
-from admin_api.models.news import NewsRequest, NewsResponse
 from admin_api.utils import http_client
 from typing import Optional
 
 DJANGO_API_URL = "http://django:8000/api/"
 
 
-async def create_news_service(news: dict) -> dict:
+async def create_tags_service(tags: dict) -> dict:
     async with httpx.AsyncClient() as client:
         try:
             response = await client.post(
-                f'{DJANGO_API_URL}news_create/',
-                json=news  # Убедитесь, что данные корректно отформатированы в JSON
+                f'{DJANGO_API_URL}tags_create/',
+                json=tags  # Убедитесь, что данные корректно отформатированы в JSON
             )
             response.raise_for_status()  # Вызовет исключение для HTTP ошибок
 
@@ -33,15 +32,15 @@ async def create_news_service(news: dict) -> dict:
             print(f"Произошла непредвиденная ошибка: {str(e)}")
             raise HTTPException(status_code=500, detail="Произошла ошибка при обработке запроса")
 
-async def get_news_service(news_id):
+async def get_tags_service(tags_id):
     async with http_client as client:
-        response = await client.get(f"{DJANGO_API_URL}news/{news_id}/")
+        response = await client.get(f"{DJANGO_API_URL}tags/{tags_id}/")
         if response.status_code == 404:
             return None
         if response.status_code == 200:
             return response.json()
 
-async def list_news_service(limit: int, offset: int, is_published: Optional[bool]):
+async def list_tags_service(limit: int, offset: int, is_published: Optional[bool]):
     """
     Запрос к Django API для получения списка новостей.
 
@@ -58,7 +57,7 @@ async def list_news_service(limit: int, offset: int, is_published: Optional[bool
 
     # Запрос к Django API
     async with httpx.AsyncClient() as client:
-        response = await client.get(f"{DJANGO_API_URL}news/", params=params)
+        response = await client.get(f"{DJANGO_API_URL}tags/", params=params)
 
     # Проверка ответа
     if response.status_code == 200:
@@ -67,17 +66,17 @@ async def list_news_service(limit: int, offset: int, is_published: Optional[bool
     # Обработка ошибок
     raise HTTPException(status_code=response.status_code, detail=response.text)
 
-async def update_news_service(news_id: int, news: NewsRequest) -> NewsResponse:
+async def update_tags_service(tags_id: int, tags: dict) -> dict:
     async with http_client as client:
-        response = await client.put(f"{DJANGO_API_URL}news/{news_id}/", json=news.dict())
+        response = await client.put(f"{DJANGO_API_URL}tags/{tags_id}/", json=tags)
         if response.status_code == 404:
             return None
         response.raise_for_status()
-        return NewsResponse(**response.json())
+        return response.json()
 
-async def delete_news_service(news_id):
+async def delete_tags_service(tags_id):
     async with http_client as client:
-        response = await client.delete(f"{DJANGO_API_URL}news/{news_id}/")
+        response = await client.delete(f"{DJANGO_API_URL}tags/{tags_id}/")
         if response.status_code == 404:
             return False
         response.raise_for_status()

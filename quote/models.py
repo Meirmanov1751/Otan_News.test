@@ -22,7 +22,7 @@ class Quote(models.Model):
 class QuoteTranslation(models.Model):
     quote = models.TextField()
     lang = models.ForeignKey(Language, on_delete=models.CASCADE)
-    quote_id = models.ForeignKey(Quote, related_name='translations', on_delete=models.CASCADE)
+    quote_id = models.ForeignKey(Quote, related_name='translations', on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         unique_together = ('quote_id', 'lang')

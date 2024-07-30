@@ -12,9 +12,17 @@ from admin_api.services.news_service import (
 
 router = APIRouter()
 
-@router.post("/", response_model=NewsResponse)
-async def create_news(news: NewsRequest) -> NewsResponse:
-    return await create_news_service(news)
+
+
+@router.post("/", response_model=dict)
+async def create_news(news: dict):
+    try:
+        return await create_news_service(news)
+    except HTTPException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
+    except Exception as e:
+        # Обработка неожиданных ошибок
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/{news_id}", response_model=dict)
 async def get_news(news_id):

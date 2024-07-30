@@ -13,7 +13,7 @@ class Tag(models.Model):
 class TagTranslation(models.Model):
     tag = models.CharField(max_length=255)
     lang = models.ForeignKey(Language, on_delete=models.CASCADE)
-    tag_id = models.ForeignKey(Tag, related_name='translations', on_delete=models.CASCADE)
+    tag_id = models.ForeignKey(Tag, related_name='translations', on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         unique_together = ('tag_id', 'lang')

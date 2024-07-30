@@ -4,8 +4,12 @@ from rest_framework import viewsets
 from .models import Quote, QuoteTranslation
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import QuoteFilter
-from .serializers import QuoteSerializer, QuoteTranslationSerializer
+from .serializers import QuoteSerializer, QuoteTranslationSerializer, QuoteCreateSerializer
 
+class QuoteCreateViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                      mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    queryset = Quote.objects.all()
+    serializer_class = QuoteCreateSerializer
 
 class QuoteViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
                    mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):

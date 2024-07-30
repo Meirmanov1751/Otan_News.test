@@ -18,3 +18,28 @@ class QuoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quote
         fields = '__all__'
+
+class QuoteTranslationCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuoteTranslation
+        fields = ['quote', 'lang']  # Убедитесь, что здесь нет 'quote_id'
+
+
+class QuoteCreateSerializer(serializers.ModelSerializer):
+    translations = QuoteTranslationCreateSerializer(many=True, required=False)
+
+    class Meta:
+        model = Quote
+        fields = ['id', 'quote_author', 'translations']
+
+    def create(self, validated_data):
+        translations_data = validated_data.pop('translations', [])
+
+        # Создание экземпляра Quote
+        quote_instance = Quote.objects.create(**validated_data)
+
+        # Создание переводов для цитаты
+        for translation_data in translations_data:
+            QuoteTranslation.objects.create(quote_id=quote_instance, **translation_data)
+
+        return quote_instance
