@@ -5,7 +5,7 @@ from admin_api.services.lang_services import (
     create_language_service,
     get_language_service,
     delete_language_service,
-    list_lang_service
+    list_language_service
 )
 
 router = APIRouter()
