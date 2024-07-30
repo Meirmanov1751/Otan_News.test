@@ -1,5 +1,5 @@
 from typing import List  # Import the List type
-
+from typing import Optional
 from fastapi import APIRouter, HTTPException
 from admin_api.services.lang_services import (
     create_language_service,
@@ -23,7 +23,7 @@ async def list_tags(limit: int = 10, offset: int = 0, is_published: Optional[boo
     - **offset**: Смещение от начала списка.
     - **is_published**: Фильтрация новостей по статусу публикации.
     """
-    return await list_lang_service(limit, offset, is_published)
+    return await list_language_service(limit, offset, is_published)
 
 @router.get("/{language_id}", response_model=dict)
 async def get_comment(language_id: int) -> dict:
