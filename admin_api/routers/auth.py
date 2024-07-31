@@ -1,58 +1,65 @@
-# fastapi_app/routers/auth.py
 from datetime import datetime, timedelta
 from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
-from admin_api.services.auth_service import authenticate_user, create_access_token, get_current_user, get_users_list
-from admin_api.utils import SECRET_KEY, ALGORITHM, jwt, OAuth2PasswordBearer
+from admin_api.utils import OAuth2PasswordBearer
 from typing import List, Dict
-from enum import Enum
+import httpx
+
+# URL for Django authentication endpoint
+DJANGO_API_URL = "http://django:8000/"
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
-# Login endpoint for user authentication
+
+
 @router.post("/login", response_model=dict)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    # Вызываем функцию для аутентификации пользователя и получения токена
-    auth_token = await authenticate_user(form_data.username, form_data.password)
+    async with httpx.AsyncClient() as client:
+        response = await client.post(f'{DJANGO_API_URL}api/token/',
+                                     data={"email": form_data.username, "password": form_data.password})
 
-    # Если токен получен успешно, создаем и возвращаем токен доступа
-    if auth_token:
+        if response.status_code == 200:
+            return response.json()
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password")
 
-        # Возвращаем токен и тип токена
-        return auth_token
 
-    # Возвращаем ошибку, если аутентификация не удалась
-    raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Incorrect username or password",
-    )
-
-# Endpoint to retrieve the current user's information
 @router.get("/user", response_model=dict)
-async def read_users_me(current_user: dict = Depends(get_current_user)):
-    return current_user
+async def read_users_me(token: str = Depends(oauth2_scheme)):
+    headers = {"Authorization": f"Bearer {token}"}
+    async with httpx.AsyncClient() as client:
+        response = await client.get(f'{DJANGO_API_URL}auth/users/me/', headers=headers)
+
+        if response.status_code == 200:
+            return response.json()
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
+
 
 @router.get("/users", response_model=List)
-async def read_users_me(token: str = Depends(oauth2_scheme)):
-    return await get_users_list(token)
+async def read_users_list(token: str = Depends(oauth2_scheme)):
+    headers = {"Authorization": f"Bearer {token}"}
+    async with httpx.AsyncClient() as client:
+        response = await client.get(f'{DJANGO_API_URL}auth/users/', headers=headers)
+
+        if response.status_code == 200:
+            return response.json()
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
 
 
+@router.post("/reset_password", response_model=dict)
+async def reset_password(data: dict):
+    async with httpx.AsyncClient() as client:
+        response = await client.post(f'{DJANGO_API_URL}auth/users/reset_password/', data=data.dict())
 
-class UserRole:
-    GUEST = 'guest'
-    JOURNALIST = 'journalist'
-    SUPER_ADMIN = 'super_admin'
-
-    ROLE_CHOICES = (
-        (GUEST, 'Guest'),
-        (JOURNALIST, 'Journalist'),
-        (SUPER_ADMIN, 'Super Admin'),
-    )
+        if response.status_code == 204:
+            return {"detail": "Password reset e-mail has been sent."}
+        raise HTTPException(status_code=response.status_code, detail=response.json().get("detail", "Error"))
 
 
+@router.post("/reset_password_confirm", response_model=dict)
+async def reset_password_confirm(data: dict):
+    async with httpx.AsyncClient() as client:
+        response = await client.post(f'{DJANGO_API_URL}auth/users/reset_password_confirm/', data=data.dict())
 
-@router.get("/roles", response_model=List)
-async def list_categories():
-    # Формируем список категорий с их идентификаторами и названиями
-    roles = [{"id": index + 1, "name": cat[0]} for index, cat in enumerate(UserRole.ROLE_CHOICES)]
-    return roles
+        if response.status_code == 204:
+            return {"detail": "Password has been reset successfully."}
+        raise HTTPException(status_code=response.status_code, detail=response.json().get("detail", "Error"))

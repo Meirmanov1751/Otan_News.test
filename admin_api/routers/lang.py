@@ -1,5 +1,6 @@
 from typing import List  # Import the List type
-from typing import Optional
+from pydantic import BaseModel, Field
+from typing import List, Optional
 from fastapi import APIRouter, HTTPException
 from admin_api.services.lang_services import (
     create_language_service,
@@ -10,8 +11,9 @@ from admin_api.services.lang_services import (
 
 router = APIRouter()
 
+
 @router.post("/", response_model=dict)
-async def create_comment(language: dict) -> dict:
+async def create_comment(language: dict):
     return await create_language_service(language)
 
 @router.get("/", response_model=dict)

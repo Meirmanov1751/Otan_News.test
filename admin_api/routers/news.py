@@ -1,7 +1,7 @@
-from typing import List  # Import the List type
-from typing import Optional
+from pydantic import BaseModel, Field
+from typing import List, Optional
 from fastapi import APIRouter, HTTPException
-from admin_api.models.news import NewsRequest, NewsResponse
+from admin_api.models.news import NewsRequest
 from admin_api.services.news_service import (
     create_news_service,
     get_news_service,
@@ -11,7 +11,6 @@ from admin_api.services.news_service import (
 )
 
 router = APIRouter()
-
 
 
 @router.post("/", response_model=dict)
@@ -43,8 +42,8 @@ async def list_news(limit: int = 10, offset: int = 0, is_published: Optional[boo
     """
     return await list_news_service(limit, offset, is_published)
 
-@router.put("/{news_id}", response_model=NewsResponse)
-async def update_news(news_id: int, news: NewsRequest) -> NewsResponse:
+@router.put("/{news_id}", response_model=dict)
+async def update_news(news_id: int, news: NewsRequest) -> dict:
     updated_news = await update_news_service(news_id, news)
     if not updated_news:
         raise HTTPException(status_code=404, detail="News not found")

@@ -1,10 +1,12 @@
 # fastapi_app/services/auth_service.py
 from fastapi import APIRouter, HTTPException, Depends
 import httpx
+import jwt
 from typing import List, Dict
 from fastapi import HTTPException, status
 from admin_api.utils import SECRET_KEY, ALGORITHM, jwt, OAuth2PasswordBearer
 from datetime import datetime, timedelta
+from user.models import User
 
 # URL for Django authentication endpoint
 DJANGO_API_URL = "http://django:8000/"
@@ -80,3 +82,5 @@ async def get_users_list(token: str) -> List:
     # Получаем данные пользователя из ответа Django API
     user_data = response.json()
     return user_data
+
+

@@ -43,6 +43,6 @@ class TagCreateSerializer(serializers.ModelSerializer):
 
         # Создание переводов для Tag
         for translation_data in translations_data:
-            TagTranslation.objects.create(tag=tag_instance, **translation_data)
+            TagTranslation.objects.create(tag_id=tag_instance, **translation_data)
 
         return tag_instance

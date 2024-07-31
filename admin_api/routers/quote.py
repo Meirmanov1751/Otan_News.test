@@ -1,5 +1,5 @@
-from typing import List  # Import the List type
-from typing import Optional
+from pydantic import BaseModel, Field
+from typing import List, Optional
 from fastapi import APIRouter, HTTPException
 from admin_api.services.quote_services import (
     create_quote_service,
@@ -10,7 +10,6 @@ from admin_api.services.quote_services import (
 )
 
 router = APIRouter()
-
 
 
 @router.post("/", response_model=dict)

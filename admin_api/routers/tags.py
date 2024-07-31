@@ -8,10 +8,11 @@ from admin_api.services.tags_services import (
     update_tags_service,
     delete_tags_service,
 )
+from pydantic import BaseModel, Field
+from typing import List, Optional
+
 
 router = APIRouter()
-
-
 
 @router.post("/", response_model=dict)
 async def create_tags(tags: dict):
@@ -22,6 +23,7 @@ async def create_tags(tags: dict):
     except Exception as e:
         # Обработка неожиданных ошибок
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.get("/{tags_id}", response_model=dict)
 async def get_tags(tags_id):
@@ -42,12 +44,14 @@ async def list_tags(limit: int = 10, offset: int = 0, is_published: Optional[boo
     """
     return await list_tags_service(limit, offset, is_published)
 
+
 @router.put("/{tags_id}", response_model=dict)
 async def update_tags(tags_id: int, tags: dict) -> dict:
     updated_tags = await update_tags_service(tags_id, tags)
     if not updated_tags:
         raise HTTPException(status_code=404, detail="tags not found")
     return updated_tags
+
 
 @router.delete("/{tags_id}", response_model=dict)
 async def delete_tags(tags_id: int) -> dict:
