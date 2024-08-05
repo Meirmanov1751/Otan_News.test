@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
-from fastapi import APIRouter, HTTPException, Depends, status
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, HTTPException, status, Form, Depends, Request
+from pydantic import BaseModel
 from admin_api.utils import OAuth2PasswordBearer
 from typing import List, Dict
+from typing import Any
 import httpx
 
 # URL for Django authentication endpoint
@@ -12,16 +13,35 @@ router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+
+async def get_request_data(request: Request):
+    content_type = request.headers.get('Content-Type', '')
+
+    if 'application/json' in content_type:
+        body = await request.json()
+        return LoginRequest(**body)
+    elif 'multipart/form-data' in content_type or 'application/x-www-form-urlencoded' in content_type:
+        form_data = await request.form()
+        return LoginRequest(username=form_data.get('username'), password=form_data.get('password'))
+    else:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Unsupported content type")
+
+
 @router.post("/login", response_model=dict)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login_for_access_token(body: LoginRequest = Depends(get_request_data)):
     async with httpx.AsyncClient() as client:
+
         response = await client.post(f'{DJANGO_API_URL}api/token/',
-                                     data={"email": form_data.username, "password": form_data.password})
+                                     data={"email": body.username, "password": body.password})
 
         if response.status_code == 200:
             return response.json()
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password")
-
+        else:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password")
 
 @router.get("/user", response_model=dict)
 async def read_users_me(token: str = Depends(oauth2_scheme)):
