@@ -7,7 +7,7 @@ from typing import Optional
 DJANGO_API_URL = "http://django:8000/api/language"
 
 async def create_language_service(language: dict) -> dict:
-    async with http_client as client:
+    async with httpx.AsyncClient() as client:
         response = await client.post(f"{DJANGO_API_URL}/", json=language)
         response.raise_for_status()
         return response.json()
@@ -39,7 +39,7 @@ async def list_language_service(limit: int, offset: int, is_published: Optional[
     raise HTTPException(status_code=response.status_code, detail=response.text)
 
 async def get_language_service(language_id: dict) -> dict:
-    async with http_client as client:
+    async with httpx.AsyncClient() as client:
         response = await client.get(f"{DJANGO_API_URL}/{language_id}/")
         if response.status_code == 404:
             return None
@@ -47,7 +47,7 @@ async def get_language_service(language_id: dict) -> dict:
         return response.json()
 
 async def delete_language_service(language_id: int) -> bool:
-    async with http_client as client:
+    async with httpx.AsyncClient() as client:
         response = await client.delete(f"{DJANGO_API_URL}/{language_id}/")
         if response.status_code == 404:
             return False

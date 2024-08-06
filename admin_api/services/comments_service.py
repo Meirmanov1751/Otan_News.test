@@ -7,13 +7,13 @@ from admin_api.utils import http_client
 DJANGO_API_URL = "http://django:8000/api/"
 
 async def create_comment_service(comment: CommentRequest) -> CommentResponse:
-    async with http_client as client:
+    async with httpx.AsyncClient() as client:
         response = await client.post(f"{DJANGO_API_URL}commentsCreate/", json=comment.dict())
         response.raise_for_status()
         return CommentResponse(**response.json())
 
 async def get_comment_service(comment_id: int) -> CommentResponse:
-    async with http_client as client:
+    async with httpx.AsyncClient() as client:
         response = await client.get(f"{DJANGO_API_URL}comments/{comment_id}/")
         if response.status_code == 404:
             return None

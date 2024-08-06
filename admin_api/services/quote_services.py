@@ -33,7 +33,7 @@ async def create_quote_service(quote: dict) -> dict:
             raise HTTPException(status_code=500, detail="Произошла ошибка при обработке запроса")
 
 async def get_quote_service(quote_id):
-    async with http_client as client:
+    async with httpx.AsyncClient() as client:
         response = await client.get(f"{DJANGO_API_URL}quote/{quote_id}/")
         if response.status_code == 404:
             return None

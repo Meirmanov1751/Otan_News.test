@@ -33,7 +33,7 @@ async def create_tags_service(tags: dict) -> dict:
             raise HTTPException(status_code=500, detail="Произошла ошибка при обработке запроса")
 
 async def get_tags_service(tags_id):
-    async with http_client as client:
+    async with httpx.AsyncClient() as client:
         response = await client.get(f"{DJANGO_API_URL}tags/{tags_id}/")
         if response.status_code == 404:
             return None
@@ -67,7 +67,7 @@ async def list_tags_service(limit: int, offset: int, is_published: Optional[bool
     raise HTTPException(status_code=response.status_code, detail=response.text)
 
 async def update_tags_service(tags_id: int, tags: dict) -> dict:
-    async with http_client as client:
+    async with httpx.AsyncClient() as client:
         response = await client.put(f"{DJANGO_API_URL}tags/{tags_id}/", json=tags)
         if response.status_code == 404:
             return None
@@ -75,7 +75,7 @@ async def update_tags_service(tags_id: int, tags: dict) -> dict:
         return response.json()
 
 async def delete_tags_service(tags_id):
-    async with http_client as client:
+    async with httpx.AsyncClient() as client:
         response = await client.delete(f"{DJANGO_API_URL}tags/{tags_id}/")
         if response.status_code == 404:
             return False

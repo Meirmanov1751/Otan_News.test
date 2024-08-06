@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from fastapi import APIRouter, HTTPException, status, Form, Depends, Request
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from admin_api.utils import OAuth2PasswordBearer
 from typing import List, Dict
 from typing import Any
@@ -43,6 +43,7 @@ async def login_for_access_token(body: LoginRequest = Depends(get_request_data))
         else:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password")
 
+
 @router.get("/user", response_model=dict)
 async def read_users_me(token: str = Depends(oauth2_scheme)):
     headers = {"Authorization": f"Bearer {token}"}
@@ -65,21 +66,55 @@ async def read_users_list(token: str = Depends(oauth2_scheme)):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
 
 
+class PasswordResetRequest(BaseModel):
+    email: EmailStr  # Используем EmailStr для валидации email
+
+
+class PasswordResetConfirmRequest(BaseModel):
+    uid: str
+    token: str
+    new_password: str
+
+
 @router.post("/reset_password", response_model=dict)
-async def reset_password(data: dict):
+async def reset_password(data: PasswordResetRequest):
+    """
+    Эндпоинт для отправки запроса на сброс пароля.
+    """
     async with httpx.AsyncClient() as client:
-        response = await client.post(f'{DJANGO_API_URL}auth/users/reset_password/', data=data.dict())
+        response = await client.post(
+            f'{DJANGO_API_URL}auth/users/reset_password/',
+            data=data.dict()  # Отправляем данные в формате формы
+        )
 
         if response.status_code == 204:
             return {"detail": "Password reset e-mail has been sent."}
-        raise HTTPException(status_code=response.status_code, detail=response.json().get("detail", "Error"))
+
+        try:
+            error_detail = response.json().get("detail", "Error")
+        except ValueError:
+            error_detail = "Unexpected error"
+
+        raise HTTPException(status_code=response.status_code, detail=error_detail)
 
 
 @router.post("/reset_password_confirm", response_model=dict)
-async def reset_password_confirm(data: dict):
+async def reset_password_confirm(data: PasswordResetConfirmRequest):
+    """
+    Эндпоинт для подтверждения сброса пароля.
+    """
     async with httpx.AsyncClient() as client:
-        response = await client.post(f'{DJANGO_API_URL}auth/users/reset_password_confirm/', data=data.dict())
+        response = await client.post(
+            f'{DJANGO_API_URL}auth/users/reset_password_confirm/',
+            data=data.dict()  # Отправляем данные в формате формы
+        )
 
         if response.status_code == 204:
             return {"detail": "Password has been reset successfully."}
-        raise HTTPException(status_code=response.status_code, detail=response.json().get("detail", "Error"))
+
+        try:
+            error_detail = response.json().get("detail", "Error")
+        except ValueError:
+            error_detail = "Unexpected error"
+
+        raise HTTPException(status_code=response.status_code, detail=error_detail)
