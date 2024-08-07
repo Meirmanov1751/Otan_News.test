@@ -109,21 +109,43 @@ class NewsCreateSerializer(serializers.ModelSerializer):
         tags_data = validated_data.pop('tags', [])
         links_data = validated_data.pop('links', [])
 
-        # Создание экземпляра News
         news_instance = News.objects.create(**validated_data)
 
-        # Создание NewsTranslations
         for translation_data in translations_data:
             NewsTranslation.objects.create(news=news_instance, **translation_data)
 
-        # Установление ManyToMany связей для тегов
         news_instance.tags.set(tags_data)
 
-        # Создание Links
         for link_data in links_data:
-            Link.objects.create(new_id=news_instance, **link_data)
+            Link.objects.create(news=news_instance, **link_data)
 
         return news_instance
+
+    def update(self, instance, validated_data):
+        # Обновление существующих данных
+        translations_data = validated_data.pop('translations', [])
+        tags_data = validated_data.pop('tags', [])
+        links_data = validated_data.pop('links', [])
+
+        # Обновление полей News
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # Обновление переводов
+        instance.translations.all().delete()  # Удаляем старые переводы
+        for translation_data in translations_data:
+            NewsTranslation.objects.create(news=instance, **translation_data)
+
+        # Обновление тегов
+        instance.tags.set(tags_data)
+
+        # Обновление ссылок
+        instance.links.all().delete()  # Удаляем старые ссылки
+        for link_data in links_data:
+            Link.objects.create(news=instance, **link_data)
+
+        return instance
 
 class NewsShortSerializer(serializers.ModelSerializer):
     translations = NewsTranslationSerializer(many=True, read_only=True)

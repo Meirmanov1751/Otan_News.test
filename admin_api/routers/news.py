@@ -43,7 +43,7 @@ async def list_news(limit: int = 10, offset: int = 0, is_published: Optional[boo
     return await list_news_service(limit, offset, is_published)
 
 @router.put("/{news_id}", response_model=dict)
-async def update_news(news_id: int, news: NewsRequest) -> dict:
+async def update_news(news_id: int, news: dict) -> dict:
     updated_news = await update_news_service(news_id, news)
     if not updated_news:
         raise HTTPException(status_code=404, detail="News not found")
