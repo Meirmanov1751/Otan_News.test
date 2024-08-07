@@ -69,7 +69,7 @@ async def list_news_service(limit: int, offset: int, is_published: Optional[bool
 
 async def update_news_service(news_id: int, news: NewsRequest) -> NewsResponse:
     async with httpx.AsyncClient() as client:
-        response = await client.put(f"{DJANGO_API_URL}news/{news_id}/", json=news.dict())
+        response = await client.put(f"{DJANGO_API_URL}news_create/{news_id}/", json=news.dict())
         if response.status_code == 404:
             return None
         response.raise_for_status()
@@ -77,7 +77,7 @@ async def update_news_service(news_id: int, news: NewsRequest) -> NewsResponse:
 
 async def delete_news_service(news_id):
     async with httpx.AsyncClient() as client:
-        response = await client.delete(f"{DJANGO_API_URL}news/{news_id}/")
+        response = await client.delete(f"{DJANGO_API_URL}news_create/{news_id}/")
         if response.status_code == 404:
             return False
         response.raise_for_status()

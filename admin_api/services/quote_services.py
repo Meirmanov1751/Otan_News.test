@@ -68,7 +68,7 @@ async def list_quote_service(limit: int, offset: int, is_published: Optional[boo
 
 async def update_quote_service(quote_id: int, quote: dict) -> dict:
     async with http_client as client:
-        response = await client.put(f"{DJANGO_API_URL}quote/{quote_id}/", json=quote)
+        response = await client.put(f"{DJANGO_API_URL}quote_create/{quote_id}/", json=quote)
         if response.status_code == 404:
             return None
         response.raise_for_status()
@@ -76,7 +76,7 @@ async def update_quote_service(quote_id: int, quote: dict) -> dict:
 
 async def delete_quote_service(quote_id):
     async with http_client as client:
-        response = await client.delete(f"{DJANGO_API_URL}quote/{quote_id}/")
+        response = await client.delete(f"{DJANGO_API_URL}quote_create/{quote_id}/")
         if response.status_code == 404:
             return False
         response.raise_for_status()

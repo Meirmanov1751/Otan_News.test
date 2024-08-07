@@ -68,7 +68,7 @@ async def list_tags_service(limit: int, offset: int, is_published: Optional[bool
 
 async def update_tags_service(tags_id: int, tags: dict) -> dict:
     async with httpx.AsyncClient() as client:
-        response = await client.put(f"{DJANGO_API_URL}tags/{tags_id}/", json=tags)
+        response = await client.put(f"{DJANGO_API_URL}tags_create/{tags_id}/", json=tags)
         if response.status_code == 404:
             return None
         response.raise_for_status()
@@ -76,7 +76,7 @@ async def update_tags_service(tags_id: int, tags: dict) -> dict:
 
 async def delete_tags_service(tags_id):
     async with httpx.AsyncClient() as client:
-        response = await client.delete(f"{DJANGO_API_URL}tags/{tags_id}/")
+        response = await client.delete(f"{DJANGO_API_URL}tags_create/{tags_id}/")
         if response.status_code == 404:
             return False
         response.raise_for_status()
