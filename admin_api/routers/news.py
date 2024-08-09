@@ -32,7 +32,8 @@ async def get_news(news_id):
 
 
 @router.get("/", response_model=dict)
-async def list_news(limit: int = 10, offset: int = 0, is_published: Optional[bool] = None):
+async def list_news(limit: int = 10, offset: int = 0, is_published: Optional[bool] = None,
+    order_by: Optional[str] = None):
     """
     Получить список новостей с возможностью фильтрации по статусу публикации.
 
@@ -40,7 +41,7 @@ async def list_news(limit: int = 10, offset: int = 0, is_published: Optional[boo
     - **offset**: Смещение от начала списка.
     - **is_published**: Фильтрация новостей по статусу публикации.
     """
-    return await list_news_service(limit, offset, is_published)
+    return await list_news_service(limit, offset, is_published, order_by)
 
 @router.put("/{news_id}", response_model=dict)
 async def update_news(news_id: int, news: dict) -> dict:

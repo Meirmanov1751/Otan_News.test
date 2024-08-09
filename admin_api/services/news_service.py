@@ -41,30 +41,34 @@ async def get_news_service(news_id):
         if response.status_code == 200:
             return response.json()
 
-async def list_news_service(limit: int, offset: int, is_published: Optional[bool]):
+async def list_news_service(
+    limit: int,
+    offset: int,
+    is_published: Optional[bool],
+    order_by: Optional[str]  # Добавьте параметр для сортировки
+):
     """
     Запрос к Django API для получения списка новостей.
 
     - **limit**: Максимальное количество новостей, которое будет возвращено.
     - **offset**: Смещение от начала списка.
     - **is_published**: Фильтрация новостей по статусу публикации.
+    - **order_by**: Параметр для сортировки новостей.
     """
-    # Формируем параметры запроса
     params = {"limit": limit, "offset": offset}
 
-    # Добавляем параметр is_published, если он задан
     if is_published is not None:
         params["is_published"] = is_published
 
-    # Запрос к Django API
+    if order_by:
+        params["order_by"] = order_by
+
     async with httpx.AsyncClient() as client:
         response = await client.get(f"{DJANGO_API_URL}news/", params=params)
 
-    # Проверка ответа
     if response.status_code == 200:
         return response.json()
 
-    # Обработка ошибок
     raise HTTPException(status_code=response.status_code, detail=response.text)
 
 async def update_news_service(news_id: int, news: dict):

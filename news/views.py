@@ -43,6 +43,8 @@ class NewsCreateViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.R
                       mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = News.objects.all()
     serializer_class = NewsCreateSerializer
+    
+
 
 
 
