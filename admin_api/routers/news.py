@@ -1,7 +1,11 @@
 from pydantic import BaseModel, Field
 from typing import List, Optional
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, status, Form, Depends, Request
 from admin_api.models.news import NewsRequest
+from admin_api.utils import OAuth2PasswordBearer
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
+
 from admin_api.services.news_service import (
     create_news_service,
     get_news_service,
@@ -33,7 +37,7 @@ async def get_news(news_id):
 
 @router.get("/", response_model=dict)
 async def list_news(limit: int = 10, offset: int = 0, is_published: Optional[bool] = None,
-    order_by: Optional[str] = None):
+    order_by: Optional[str] = None, token: str = Depends(oauth2_scheme)):
     """
     Получить список новостей с возможностью фильтрации по статусу публикации.
 
@@ -41,7 +45,7 @@ async def list_news(limit: int = 10, offset: int = 0, is_published: Optional[boo
     - **offset**: Смещение от начала списка.
     - **is_published**: Фильтрация новостей по статусу публикации.
     """
-    return await list_news_service(limit, offset, is_published, order_by)
+    return await list_news_service(limit, offset, is_published, order_by, token)
 
 @router.put("/{news_id}", response_model=dict)
 async def update_news(news_id: int, news: dict) -> dict:

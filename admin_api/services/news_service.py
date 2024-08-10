@@ -45,7 +45,8 @@ async def list_news_service(
     limit: int,
     offset: int,
     is_published: Optional[bool],
-    order_by: Optional[str]  # Добавьте параметр для сортировки
+    order_by: Optional[str] , # Добавьте параметр для сортировки
+    token: str
 ):
     """
     Запрос к Django API для получения списка новостей.
@@ -63,8 +64,10 @@ async def list_news_service(
     if order_by:
         params["order_by"] = order_by
 
+    headers = {"Authorization": f"Bearer {token}"}
+
     async with httpx.AsyncClient() as client:
-        response = await client.get(f"{DJANGO_API_URL}news/", params=params)
+        response = await client.get(f"{DJANGO_API_URL}news_admin/", params=params, headers=headers)
 
     if response.status_code == 200:
         return response.json()

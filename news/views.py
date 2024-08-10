@@ -39,6 +39,33 @@ class NewsViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retriev
 
         return queryset
 
+
+class NewsAdminViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = NewsFilter
+    pagination_class = NewsPagination
+
+    def get_queryset(self):
+        user = self.request.user
+
+        # Фильтрация новостей в зависимости от роли пользователя
+        if user.role == 'super_admin':
+            queryset = News.objects.all()
+        elif user.role == 'journalists':
+            queryset = News.objects.filter(author=user)
+        else:
+            queryset = News.objects.none()
+
+        # Применяем сортировку, если указан параметр order_by
+        order_by = self.request.query_params.get('order_by')
+        if order_by:
+            queryset = queryset.order_by(order_by)
+
+        return queryset
+
 class NewsCreateViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
                       mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = News.objects.all()
