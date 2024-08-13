@@ -20,20 +20,13 @@ router = APIRouter()
 
 
 @router.post("/", response_model=dict)
-async def create_news(
-    request: Request,
-    image: Optional[UploadFile] = File(None)
-):
+async def create_news(news: dict, image: UploadFile = File(None)):
     try:
-        form_data = await request.form()
-        news = {key: form_data[key] for key in form_data if key != 'image'}
         image_data = await image.read() if image else None
-
         return await create_news_service(news, image_data)
     except HTTPException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail)
     except Exception as e:
-        # Обработка неожиданных ошибок
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/{news_id}", response_model=dict)

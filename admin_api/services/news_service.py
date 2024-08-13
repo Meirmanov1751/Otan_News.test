@@ -13,22 +13,15 @@ async def create_news_service(news: dict, image: Optional[bytes]) -> dict:
         try:
             files = {"image": ("image.jpg", image, "image/jpeg")} if image else None
             response = await client.post(
-                f'{DJANGO_API_URL}news_create/',  # Проверьте правильность URL
-                data=news,  # Отправляем данные как словарь
+                f'{DJANGO_API_URL}news_create/',  # Обновите на правильный путь
+                json=news,  # Отправляем данные как JSON
                 files=files  # Отправляем изображение, если оно есть
             )
             response.raise_for_status()
-
-            response_data = response.json()
-
-            print("Ответ от Django API:", response_data)
-
-            return response_data
-
+            return response.json()
         except httpx.HTTPStatusError as http_error:
             print(f"Произошла ошибка HTTP: {http_error.response.text}")
             raise HTTPException(status_code=http_error.response.status_code, detail=http_error.response.json())
-
         except Exception as e:
             print(f"Произошла непредвиденная ошибка: {str(e)}")
             raise HTTPException(status_code=500, detail="Произошла ошибка при обработке запроса")
