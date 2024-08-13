@@ -18,16 +18,32 @@ from admin_api.services.news_service import (
 
 router = APIRouter()
 
+class Translation(BaseModel):
+    lang: int
+    title: str
+    text: str
+
+class NewsCreateRequest(BaseModel):
+    author: int
+    category: str
+    subcategory: Optional[str] = None
+    exclusive: bool
+    is_published: bool
+    quote: Optional[int] = None
+    tags: List[int]
+    translations: List[Translation]
 
 @router.post("/", response_model=dict)
-async def create_news(news: dict, image: UploadFile = File(None)):
+async def create_news(news: NewsCreateRequest, image: UploadFile = File(None)):
     try:
         image_data = await image.read() if image else None
-        return await create_news_service(news, image_data)
+        # Преобразование данных и отправка на Django API
+        return await create_news_service(news.dict(), image_data)
     except HTTPException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.get("/{news_id}", response_model=dict)
 async def get_news(news_id):

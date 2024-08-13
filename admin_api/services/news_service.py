@@ -13,17 +13,15 @@ async def create_news_service(news: dict, image: Optional[bytes]) -> dict:
         try:
             files = {"image": ("image.jpg", image, "image/jpeg")} if image else None
             response = await client.post(
-                f'{DJANGO_API_URL}news_create/',  # Обновите на правильный путь
-                json=news,  # Отправляем данные как JSON
-                files=files  # Отправляем изображение, если оно есть
+                f'{DJANGO_API_URL}news_create/',
+                data=news,
+                files=files
             )
             response.raise_for_status()
             return response.json()
         except httpx.HTTPStatusError as http_error:
-            print(f"Произошла ошибка HTTP: {http_error.response.text}")
             raise HTTPException(status_code=http_error.response.status_code, detail=http_error.response.json())
         except Exception as e:
-            print(f"Произошла непредвиденная ошибка: {str(e)}")
             raise HTTPException(status_code=500, detail="Произошла ошибка при обработке запроса")
 
 async def get_news_service(news_id):
