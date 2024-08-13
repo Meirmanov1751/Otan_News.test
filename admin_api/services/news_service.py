@@ -8,20 +8,29 @@ from typing import Optional
 DJANGO_API_URL = "http://django:8000/api/"
 
 
-async def create_news_service(news: dict, image: Optional[bytes]) -> dict:
+async def create_news_service(news: dict) -> dict:
     async with httpx.AsyncClient() as client:
         try:
-            files = {"image": ("image.jpg", image, "image/jpeg")} if image else None
             response = await client.post(
                 f'{DJANGO_API_URL}news_create/',
-                data=news,
-                files=files
+                json=news  # Убедитесь, что данные корректно отформатированы в JSON
             )
-            response.raise_for_status()
-            return response.json()
+            response.raise_for_status()  # Вызовет исключение для HTTP ошибок
+
+            response_data = response.json()
+
+            # Логирование ответа для отладки
+            print("Ответ от Django API:", response_data)
+
+            return response_data
+
         except httpx.HTTPStatusError as http_error:
+            print(f"Произошла ошибка HTTP: {http_error.response.text}")  # Логирование ошибки
             raise HTTPException(status_code=http_error.response.status_code, detail=http_error.response.json())
+
         except Exception as e:
+            # Обработка неожиданных ошибок
+            print(f"Произошла непредвиденная ошибка: {str(e)}")
             raise HTTPException(status_code=500, detail="Произошла ошибка при обработке запроса")
 
 async def get_news_service(news_id):
