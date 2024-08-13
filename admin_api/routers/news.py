@@ -2,8 +2,6 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 from fastapi import APIRouter, HTTPException, status, Form, Depends, Request
 from admin_api.models.news import NewsRequest
-from fastapi import APIRouter, HTTPException, UploadFile, File
-from typing import Optional, Dict, Any
 from admin_api.utils import OAuth2PasswordBearer
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
@@ -20,39 +18,13 @@ router = APIRouter()
 
 
 @router.post("/", response_model=dict)
-async def create_news(
-    author: str = Form(...),
-    category: str = Form(...),
-    subcategory: Optional[str] = Form(None),
-    exclusive: bool = Form(False),
-    is_published: bool = Form(False),
-    quote: Optional[str] = Form(None),
-    translations: Optional[list] = Form([]),
-    tags: Optional[list] = Form([]),
-    links: Optional[list] = Form([]),
-    image: UploadFile = File(None),  # Обработка файла изображения
-):
-    # Подготовка данных
-    news_data = {
-        "author": author,
-        "category": category,
-        "subcategory": subcategory,
-        "exclusive": exclusive,
-        "is_published": is_published,
-        "quote": quote,
-        "translations": translations,
-        "tags": tags,
-        "links": links
-    }
-
-    # Если файл изображения передан, добавляем его отдельно
-    image_data = await image.read() if image else None
-
+async def create_news(news: dict):
     try:
-        return await create_news_service(news_data, image_data)
+        return await create_news_service(news)
     except HTTPException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail)
     except Exception as e:
+        # Обработка неожиданных ошибок
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/{news_id}", response_model=dict)
