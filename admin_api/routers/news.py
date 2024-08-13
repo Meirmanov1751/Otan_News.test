@@ -2,6 +2,8 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 from fastapi import APIRouter, HTTPException, status, Form, Depends, Request
 from admin_api.models.news import NewsRequest
+from fastapi import APIRouter, File, UploadFile, Form, HTTPException
+from typing import Optional
 from admin_api.utils import OAuth2PasswordBearer
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
@@ -18,9 +20,16 @@ router = APIRouter()
 
 
 @router.post("/", response_model=dict)
-async def create_news(news: dict):
+async def create_news(
+    request: Request,
+    image: Optional[UploadFile] = File(None)
+):
     try:
-        return await create_news_service(news)
+        form_data = await request.form()
+        news = {key: form_data[key] for key in form_data if key != 'image'}
+        image_data = await image.read() if image else None
+
+        return await create_news_service(news, image_data)
     except HTTPException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail)
     except Exception as e:
