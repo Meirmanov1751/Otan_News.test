@@ -15,6 +15,8 @@ def handle_user_registered(sender, user, request, **kwargs):
             profile.is_active = False  # Пользователь не активен до подтверждения
             profile.save()
             send_confirmation_code(profile.phone_number, confirmation_code)
+        else:
+            profile.is_active = True
 
 
 def send_confirmation_code(phone_number, confirmation_code):
