@@ -26,9 +26,6 @@ class UserManager(BaseUserManager):
 
         email = self.normalize_email(email)
 
-        # Проверяем роль пользователя и устанавливаем is_active = True, если роль журналист или супер админ
-        if other_fields.get('role') in [User.ROLES.JOURNALIST, User.ROLES.SUPER_ADMIN]:
-            other_fields.setdefault('is_active', True)
 
         user = self.model(email=email, **other_fields)
         user.set_password(password)
@@ -48,7 +45,7 @@ class User(AbstractBaseUser):
             (JOURNALIST, 'Журналисты'),
         )
 
-    avatar = models.ImageField(upload_to='avatars/%Y')
+    avatar = models.ImageField(upload_to='avatars/%Y', blank=True, null=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=15)
@@ -56,7 +53,7 @@ class User(AbstractBaseUser):
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=20, choices=ROLES.ROLES_CHOICES,
                             default=ROLES.GUEST)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
