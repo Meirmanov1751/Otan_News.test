@@ -25,7 +25,7 @@ class UserManager(BaseUserManager):
             raise ValueError(_('You must provide an email address'))
 
         email = self.normalize_email(email)
-
+        other_fields.setdefault('is_active', True)
 
         user = self.model(email=email, **other_fields)
         user.set_password(password)
