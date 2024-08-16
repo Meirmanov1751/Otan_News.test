@@ -63,6 +63,7 @@ class News(models.Model):
     subcategory = models.CharField(max_length=50, choices=SUBCATEGORYS.SUBCATEGORY_CHOICES, blank=True, null=True)
     exclusive = models.BooleanField(default=False)
     is_published = models.BooleanField(default=False)
+    published_at = models.DateTimeField(blank=True, null=True)
     views = models.PositiveIntegerField(default=0)
 
     def __str__(self):

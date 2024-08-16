@@ -101,7 +101,7 @@ class NewsCreateSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'author', 'image', 'category', 'subcategory',
             'exclusive', 'is_published', 'quote',
-            'translations', 'tags', 'links'
+            'translations', 'tags', 'links','published_at'
         ]
 
     def create(self, validated_data):
@@ -160,7 +160,7 @@ class NewsShortSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = News
-        fields = ['id', 'author', 'translations', 'category', 'image', 'created_at', 'updated_at']
+        fields = ['id', 'author', 'published_at', 'translations', 'category', 'image', 'created_at', 'updated_at']
 
 
 class VoteCommentSerializer(serializers.ModelSerializer):
