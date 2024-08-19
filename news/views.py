@@ -30,15 +30,13 @@ class NewsViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retriev
     pagination_class = NewsPagination
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().filter(is_published=True)
         order_by = self.request.query_params.get('order_by')
 
         if order_by:
             queryset = queryset.order_by(order_by)
 
-
         return queryset
-
 
 class NewsAdminViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
                   mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
@@ -84,7 +82,7 @@ class NewsShortViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Re
     pagination_class = NewsPagination
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().filter(is_published=True)
         order_by = self.request.query_params.get('order_by')
 
         if order_by:
