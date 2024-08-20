@@ -44,7 +44,7 @@ class CommentCreateSerializer(serializers.ModelSerializer):
 
 
 class NewsSerializer(serializers.ModelSerializer):
-    translations = NewsTranslationSerializer(many=True, read_only=True)
+    translations = serializers.SerializerMethodField()
     comments = CommentSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     quote = QuoteSerializer(read_only=True)
@@ -57,6 +57,19 @@ class NewsSerializer(serializers.ModelSerializer):
         if obj.image:
             return f"https://otpannews.kz:8443{obj.image.url}"
         return None
+
+    def get_translations(self, obj):
+        request = self.context.get('request')
+        print("Request context:", request)
+        lang_id = request.query_params.get('lang_id')
+        print("Lang ID:", lang_id)
+        if lang_id:
+            # Фильтровать переводы по lang_id, если параметр присутствует
+            translations = obj.translations.filter(lang=lang_id)
+        else:
+            # Возвращать все переводы, если lang_id не указан
+            translations = obj.translations.all()
+        return NewsTranslationSerializer(translations, many=True).data
 
     class Meta:
         model = News
