@@ -11,6 +11,7 @@ services:
       - POSTGRES_USER=admin@admin.kz
       - POSTGRES_PASSWORD=qazaqway123
       - TZ=Asia/Almaty
+    restart: always
     networks:
       - app_network
     volumes:
@@ -36,6 +37,7 @@ services:
       - POSTGRES_USER=admin@admin.kz
       - POSTGRES_PASSWORD=qazaqway123
       - DJANGO_API_URL=http://django:8000
+    restart: always
     networks:
       - app_network
     tmpfs:
@@ -44,6 +46,7 @@ services:
   fastapi:
     build: .
     container_name: fastapi
+    restart: always
     command: uvicorn admin_api.main:app --host 0.0.0.0 --port 8001
     volumes:
       - .:/app
@@ -63,6 +66,7 @@ services:
 
   redis:
     image: redis:6.2
+    restart: always
     ports:
       - "6379:6379"
     networks:
@@ -70,6 +74,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management
+    restart: always
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
@@ -81,6 +86,7 @@ services:
 
   nginx:
     build: ./nginx
+    restart: always
     volumes:
       - .:/app
       - /etc/letsencrypt:/etc/letsencrypt
@@ -98,6 +104,7 @@ services:
 
   celery:
     build: .
+    restart: always
     command: celery -A Otan_news worker -l info
     volumes:
       - .:/app
@@ -110,6 +117,7 @@ services:
 
   celery_beat:
     build: .
+    restart: always
     command: celery -A Otan_news beat -l info
     volumes:
       - .:/app
@@ -131,10 +139,11 @@ services:
       - TZ=Asia/Almaty
     networks:
       - app_network
-    restart: unless-stopped
+    restart: always
 
   certbot:
     image: certbot/certbot
+    restart: always
     container_name: certbot
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
