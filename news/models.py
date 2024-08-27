@@ -13,6 +13,8 @@ class News(models.Model):
         SOCIETY = 'Society'
         ADVERTISING = 'Advertising'
         BY_EAR = 'By hearing'
+        ANALYTICS = 'Analytics'
+        PEOPLE_FROM_MANGYSTAU = 'People from Mangystau'
 
         CATEGORY_CHOICES = (
             (NEWS, 'Новости'),
@@ -20,6 +22,8 @@ class News(models.Model):
             (SOCIETY, 'Общество'),
             (ADVERTISING, 'Реклама'),
             (BY_EAR, 'На слуху'),
+            (ANALYTICS, 'Аналитика'),
+            (PEOPLE_FROM_MANGYSTAU, 'Выходцы из Мангыстау'),
         )
 
     class SUBCATEGORYS:
