@@ -19,8 +19,8 @@ class CATEGORYS:
         (SOCIETY, 'Society'),
         (ADVERTISING, 'Advertising'),
         (BY_EAR, 'By hearing'),
-        (ANALYTICS, 'Аналитика'),
-        (PEOPLE_FROM_MANGYSTAU, 'Выходцы из Мангыстау'),
+        (ANALYTICS, 'Analytics'),
+        (PEOPLE_FROM_MANGYSTAU, 'People from Mangystau'),
     )
 
 # Класс подкатегорий
