@@ -27,6 +27,7 @@ async def create_news(news: dict):
         # Обработка неожиданных ошибок
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.get("/{news_id}", response_model=dict)
 async def get_news(news_id):
     news = await get_news_service(news_id)
@@ -37,7 +38,7 @@ async def get_news(news_id):
 
 @router.get("/", response_model=dict)
 async def list_news(limit: int = 10, offset: int = 0, is_published: Optional[bool] = None,
-    order_by: Optional[str] = None, token: str = Depends(oauth2_scheme),):
+                    order_by: Optional[str] = None, token: str = Depends(oauth2_scheme), ):
     """
     Получить список новостей с возможностью фильтрации по статусу публикации.
 
@@ -47,12 +48,14 @@ async def list_news(limit: int = 10, offset: int = 0, is_published: Optional[boo
     """
     return await list_news_service(limit, offset, is_published, order_by, token)
 
+
 @router.put("/{news_id}", response_model=dict)
 async def update_news(news_id: int, news: dict) -> dict:
     updated_news = await update_news_service(news_id, news)
     if not updated_news:
         raise HTTPException(status_code=404, detail="News not found")
     return updated_news
+
 
 @router.delete("/{news_id}", response_model=dict)
 async def delete_news(news_id: int) -> dict:

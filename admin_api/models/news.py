@@ -1,14 +1,17 @@
 from pydantic import BaseModel, Field
 from typing import Optional, List
 
+
 class NewsTranslation(BaseModel):
     lang_id: int
     title: str
     text: str
 
+
 class Tag(BaseModel):
     id: int
     name: str
+
 
 class NewsRequest(BaseModel):
     category: str = Field(..., title="Category of the news", max_length=100)
@@ -19,6 +22,7 @@ class NewsRequest(BaseModel):
     translations: Optional[List[NewsTranslation]] = Field(None, title="List of translations")
     tags: Optional[List[int]] = Field(None, title="List of tag IDs")
     image: Optional[str] = Field(None, title="URL of the image")
+
 
 class NewsResponse(BaseModel):
     id: int

@@ -15,6 +15,7 @@ from typing import Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
+
 # Secret key for JWT signing
 SECRET_KEY = "django-insecure-1leu%4qcxx^80d&&7o^*(5zw4e7al774*auu^ckn1t99m)wd!)"  # Replace with a secure key
 ALGORITHM = "HS256"
@@ -22,16 +23,15 @@ ALGORITHM = "HS256"
 # admin_api/utils.py
 
 
-
-
-
 # Определение OAuth2 схемы
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
+
 
 # Модель для токена
 class Token(BaseModel):
     access_token: str
     token_type: str
+
 
 # Функция для создания JWT токена
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
@@ -43,6 +43,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
 
 # Зависимость для извлечения текущего пользователя из токена
 async def get_current_user(token: str = Depends(oauth2_scheme)):

@@ -16,6 +16,7 @@ router = APIRouter()
 async def create_comment(language: dict):
     return await create_language_service(language)
 
+
 @router.get("/", response_model=dict)
 async def list_tags(limit: int = 10, offset: int = 0, is_published: Optional[bool] = None):
     """
@@ -27,12 +28,14 @@ async def list_tags(limit: int = 10, offset: int = 0, is_published: Optional[boo
     """
     return await list_language_service(limit, offset, is_published)
 
+
 @router.get("/{language_id}", response_model=dict)
 async def get_comment(language_id: int) -> dict:
     comment = await get_language_service(language_id)
     if not comment:
         raise HTTPException(status_code=404, detail="language not found")
     return comment
+
 
 @router.delete("/{language_id}", response_model=dict)
 async def delete_comment(language_id: int) -> dict:

@@ -11,8 +11,8 @@ from admin_api.services.tags_services import (
 from pydantic import BaseModel, Field
 from typing import List, Optional
 
-
 router = APIRouter()
+
 
 @router.post("/", response_model=dict)
 async def create_tags(tags: dict):

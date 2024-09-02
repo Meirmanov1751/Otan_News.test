@@ -12,6 +12,7 @@ DJANGO_API_URL = "http://django:8000/"
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
+
 class LoginRequest(BaseModel):
     username: str
     password: str
@@ -75,7 +76,8 @@ async def register_user(data: dict = Depends(get_request_data_reg)):
         if response.status_code == 201:
             return response.json()
         else:
-            raise HTTPException(status_code=response.status_code, detail=response.json().get('detail', 'Registration failed'))
+            raise HTTPException(status_code=response.status_code,
+                                detail=response.json().get('detail', 'Registration failed'))
 
 
 @router.post("/login", response_model=dict)

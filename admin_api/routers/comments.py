@@ -10,9 +10,11 @@ from admin_api.services.comments_service import (
 
 router = APIRouter()
 
+
 @router.post("/", response_model=CommentResponse)
 async def create_comment(comment: CommentRequest) -> CommentResponse:
     return await create_comment_service(comment)
+
 
 @router.get("/{comment_id}", response_model=CommentResponse)
 async def get_comment(comment_id: int) -> CommentResponse:
@@ -20,6 +22,7 @@ async def get_comment(comment_id: int) -> CommentResponse:
     if not comment:
         raise HTTPException(status_code=404, detail="Comment not found")
     return comment
+
 
 @router.delete("/{comment_id}", response_model=dict)
 async def delete_comment(comment_id: int) -> dict:

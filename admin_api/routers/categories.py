@@ -3,6 +3,7 @@ from typing import List, Dict
 
 router = APIRouter()
 
+
 # Класс категорий
 class CATEGORYS:
     NEWS = 'News'
@@ -22,6 +23,7 @@ class CATEGORYS:
         (ANALYTICS, 'Analytics'),
         (PEOPLE_FROM_MANGYSTAU, 'People from Mangystau'),
     )
+
 
 # Класс подкатегорий
 class SUBCATEGORYS:
@@ -55,6 +57,7 @@ class SUBCATEGORYS:
         (YOUTH, 'Youth'),
     )
 
+
 # Связь категорий и подкатегорий
 CATEGORY_SUBCATEGORY_MAP = {
     CATEGORYS.NEWS: [
@@ -83,12 +86,14 @@ CATEGORY_SUBCATEGORY_MAP = {
 # Словарь для быстрого доступа к названию подкатегорий
 SUBCATEGORY_NAME_MAP = dict(SUBCATEGORYS.SUBCATEGORY_CHOICES)
 
+
 # Endpoint для получения списка категорий
 @router.get("/", response_model=List)
 async def list_categories():
     # Формируем список категорий с их идентификаторами и названиями
     categories = [{"id": index + 1, "name": cat[1]} for index, cat in enumerate(CATEGORYS.CATEGORY_CHOICES)]
     return categories
+
 
 # Endpoint для получения подкатегорий по ID категории
 @router.get("/{category_id}/subcategories", response_model=List)
@@ -104,6 +109,7 @@ async def list_subcategories(category_id: int):
     subcategories = CATEGORY_SUBCATEGORY_MAP.get(category_key, [])
 
     # Формируем список подкатегорий с их идентификаторами и названиями
-    subcategory_list = [{"id": index + 1, "name": SUBCATEGORY_NAME_MAP[subcat]} for index, subcat in enumerate(subcategories)]
+    subcategory_list = [{"id": index + 1, "name": SUBCATEGORY_NAME_MAP[subcat]} for index, subcat in
+                        enumerate(subcategories)]
 
     return subcategory_list

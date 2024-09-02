@@ -22,6 +22,7 @@ async def create_quote(quote: dict):
         # Обработка неожиданных ошибок
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.get("/{quote_id}", response_model=dict)
 async def get_quote(quote_id):
     quote = await get_quote_service(quote_id)
@@ -41,12 +42,14 @@ async def list_quote(limit: int = 10, offset: int = 0, is_published: Optional[bo
     """
     return await list_quote_service(limit, offset, is_published)
 
+
 @router.put("/{quote_id}", response_model=dict)
 async def update_quote(quote_id: int, quote: dict) -> dict:
     updated_quote = await update_quote_service(quote_id, quote)
     if not updated_quote:
         raise HTTPException(status_code=404, detail="quote not found")
     return updated_quote
+
 
 @router.delete("/{quote_id}", response_model=dict)
 async def delete_quote(quote_id: int) -> dict:
