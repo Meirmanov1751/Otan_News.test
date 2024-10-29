@@ -1,7 +1,8 @@
 from django.contrib import admin
 from .models import (
     News, NewsTranslation,
-    NewsTag, Link, Comment, VoteComment, Subscriber
+    NewsTag, Link, Comment, VoteComment, Subscriber,
+    NewsImage
 )
 
 admin.site.register(Subscriber)
@@ -18,6 +19,10 @@ class NewsTranslationInline(admin.StackedInline):
     model = NewsTranslation
     extra = 1
 
+class NewsImageInline(admin.StackedInline):
+    model = NewsImage
+    extra = 1
+
 
 class NewsTagInline(admin.TabularInline):  # Или `admin.StackedInline` в зависимости от вашего предпочтения
     model = NewsTag
@@ -28,4 +33,4 @@ class NewsAdmin(admin.ModelAdmin):
     list_display = ('id', 'image', 'author_id', 'quote', 'created_at')
     list_filter = ('created_at',)
     search_fields = ('author_id',)
-    inlines = [NewsTranslationInline, NewsTagInline, LinkInline]
+    inlines = [NewsTranslationInline, NewsTagInline, LinkInline, NewsImageInline]

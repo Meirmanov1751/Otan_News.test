@@ -6,7 +6,8 @@ from rest_framework import mixins, viewsets
 from rest_framework.response import Response
 from rest_framework import viewsets
 from .models import News, Comment
-from .serializers import NewsSerializer, NewsCreateSerializer, CommentSerializer, NewsShortSerializer, CommentCreateSerializer
+from .serializers import (NewsSerializer, NewsCreateSerializer, NewsImageCreateSerializer,
+                          CommentSerializer, NewsShortSerializer, CommentCreateSerializer)
 from .filters import NewsFilter, CommentFilter, SubscriberFilter
 
 logger = logging.getLogger('comments')
@@ -76,9 +77,6 @@ class NewsCreateViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.R
     queryset = News.objects.all()
     serializer_class = NewsCreateSerializer
     
-
-
-
 
 class NewsShortViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
                        mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):

@@ -15,6 +15,7 @@ RUN apt-get update \
 # Copy requirements.txt and install dependencies
 COPY . /app
 RUN pip install --upgrade pip
+RUN pip install --upgrade pip setuptools
 RUN pip install -r requirements.txt
 
 # Copy the rest of the application code

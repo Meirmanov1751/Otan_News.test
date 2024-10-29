@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from language.serializers import LanguageSerializer
 from user.serializers import UserSerializer
-from .models import News, NewsTranslation, NewsTag, Comment, VoteComment, Link
+from .models import News, NewsTranslation, NewsTag, Comment, VoteComment, Link, NewsImage
 from tags.serializers import TagSerializer
 from quote.serializers import QuoteSerializer
 from tags.models import Tag
@@ -15,13 +15,17 @@ class NewsTagSerializer(serializers.ModelSerializer):
         fields = ('tag',)
 
 
+class NewsImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsImage
+        fields = '__all__'
+
 class NewsTranslationSerializer(serializers.ModelSerializer):
     lang = LanguageSerializer(read_only=True)
 
     class Meta:
         model = NewsTranslation
         fields = '__all__'
-
 
 class LinkSerializer(serializers.ModelSerializer):
     class Meta:
@@ -45,6 +49,7 @@ class CommentCreateSerializer(serializers.ModelSerializer):
 
 class NewsSerializer(serializers.ModelSerializer):
     translations = serializers.SerializerMethodField()
+    images = serializers.SerializerMethodField()
     comments = CommentSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     quote = QuoteSerializer(read_only=True)
@@ -86,6 +91,11 @@ class NewsTranslationCreateSerializer(serializers.ModelSerializer):
         model = NewsTranslation
         fields = ['lang', 'title', 'text']
 
+class NewsImageCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsImage
+        fields = '__all__'
+
 class NewsTagCreateSerializer(serializers.ModelSerializer):
     tag = serializers.IntegerField()
 
@@ -108,17 +118,19 @@ class NewsCreateSerializer(serializers.ModelSerializer):
     translations = NewsTranslationCreateSerializer(many=True, required=False)
     tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True, required=False)
     links = LinkCreateSerializer(many=True, required=False)
+    images = NewsImageCreateSerializer(many=True, required=False)
 
     class Meta:
         model = News
         fields = [
             'id', 'author', 'image', 'category', 'subcategory',
             'exclusive', 'is_published', 'quote',
-            'translations', 'tags', 'links','published_at'
+            'translations', 'tags', 'links','published_at', 'images'
         ]
 
     def create(self, validated_data):
         translations_data = validated_data.pop('translations', [])
+        images_data = validated_data.pop('images', [])
         tags_data = validated_data.pop('tags', [])
         links_data = validated_data.pop('links', [])
 
@@ -126,6 +138,9 @@ class NewsCreateSerializer(serializers.ModelSerializer):
 
         for translation_data in translations_data:
             NewsTranslation.objects.create(news=news_instance, **translation_data)
+
+        for image_data in images_data:
+            NewsImage.objects.create(news=news_instance, **image_data)
 
         news_instance.tags.set(tags_data)
 
@@ -137,6 +152,7 @@ class NewsCreateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         # Обновление существующих данных
         translations_data = validated_data.pop('translations', [])
+        images_data = validated_data.pop('images', [])
         tags_data = validated_data.pop('tags', [])
         links_data = validated_data.pop('links', [])
 
@@ -146,6 +162,10 @@ class NewsCreateSerializer(serializers.ModelSerializer):
         instance.save()
 
         # Обновление переводов
+        instance.images.all().delete()  # Удаляем старые переводы
+        for image_data in images_data:
+            NewsImage.objects.create(news=instance, **image_data)
+
         instance.translations.all().delete()  # Удаляем старые переводы
         for translation_data in translations_data:
             NewsTranslation.objects.create(news=instance, **translation_data)
@@ -162,6 +182,7 @@ class NewsCreateSerializer(serializers.ModelSerializer):
 
 class NewsShortSerializer(serializers.ModelSerializer):
     translations = NewsTranslationSerializer(many=True, read_only=True)
+    images = NewsImageSerializer(many=True, read_only=True)
     author = UserSerializer(read_only=True)
     image = serializers.SerializerMethodField()
 
@@ -173,7 +194,7 @@ class NewsShortSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = News
-        fields = ['id', 'author', 'published_at', 'translations', 'category', 'image', 'created_at', 'updated_at']
+        fields = ['id', 'images', 'author', 'published_at', 'translations', 'category', 'image', 'created_at', 'updated_at']
 
 
 class VoteCommentSerializer(serializers.ModelSerializer):
