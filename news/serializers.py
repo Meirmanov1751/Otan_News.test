@@ -46,10 +46,20 @@ class CommentCreateSerializer(serializers.ModelSerializer):
         model = Comment
         fields = '__all__'
 
+class NewsImageCreateSerializer(serializers.ModelSerializer):
+
+    def get_image(self, obj):
+        request = self.context.get('request')
+        if obj.image:
+            return f"https://otpannews.kz:8443{obj.image.url}"
+        return None
+    class Meta:
+        model = NewsImage
+        fields = '__all__'
 
 class NewsSerializer(serializers.ModelSerializer):
     translations = serializers.SerializerMethodField()
-    images = serializers.SerializerMethodField()
+    images = NewsImageCreateSerializer(many=True, required=False)
     comments = CommentSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     quote = QuoteSerializer(read_only=True)
@@ -91,10 +101,6 @@ class NewsTranslationCreateSerializer(serializers.ModelSerializer):
         model = NewsTranslation
         fields = ['lang', 'title', 'text']
 
-class NewsImageCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = NewsImage
-        fields = '__all__'
 
 class NewsTagCreateSerializer(serializers.ModelSerializer):
     tag = serializers.IntegerField()
