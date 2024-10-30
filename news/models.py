@@ -84,7 +84,7 @@ class News(models.Model):
 
 class NewsImage(models.Model):
     news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='images', blank=True, null=True)
-    image = models.ImageField(upload_to='news/images/', blank=True, null=True)
+    image = models.ImageField(upload_to='newsNew/images/', blank=True, null=True)
     order = models.PositiveIntegerField(default=0, blank=True, null=True)
     source_url = models.URLField(max_length=255, blank=True, null=True)
     alt = models.CharField(max_length=255, blank=True, null=True)
