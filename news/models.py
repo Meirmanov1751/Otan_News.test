@@ -69,6 +69,7 @@ class News(models.Model):
     is_published = models.BooleanField(default=False)
     published_at = models.DateTimeField(blank=True, null=True)
     views = models.PositiveIntegerField(default=0)
+    link_to_source = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return f"Новость {self.id}"
