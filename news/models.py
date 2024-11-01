@@ -82,28 +82,20 @@ class News(models.Model):
         verbose_name = "Новость"
         verbose_name_plural = "Новости"
 
-class NewsCover(models.Model):
-    news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='covers', blank=True, null=True)
-    cover = models.ImageField(upload_to='news/covers/', blank=True, null=True)
-    order = models.PositiveIntegerField(default=0, blank=True, null=True)
-    source_url = models.URLField(max_length=255, blank=True, null=True)
-    alt = models.CharField(max_length=255, blank=True, null=True)
+# class NewsCover(models.Model):
+#     news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='covers', blank=True, null=True)
+#     cover = models.ImageField(upload_to='news/covers/', blank=True, null=True)
+#     order = models.PositiveIntegerField(default=0, blank=True, null=True)
+#     source_url = models.URLField(max_length=255, blank=True, null=True)
+#     alt = models.CharField(max_length=255, blank=True, null=True)
+#
+#
+# class NewsFiles(models.Model):
+#     news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='files', blank=True, null=True)
+#     lang = models.ForeignKey(Language, on_delete=models.CASCADE, blank=True, null=True)
+#     title = models.CharField(max_length=255, blank=True, null=True)
+#     file = models.ImageField(upload_to='news_files/', blank=True, null=True)
 
-    class Meta:
-        ordering = ['order']
-
-    def __str__(self):
-        return f"Image {self.order} for {self.news}"
-
-
-class NewsFiles(models.Model):
-    news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='files', blank=True, null=True)
-    lang = models.ForeignKey(Language, on_delete=models.CASCADE, blank=True, null=True)
-    title = models.CharField(max_length=255, blank=True, null=True)
-    file = models.ImageField(upload_to='news_files/', blank=True, null=True)
-
-    def __str__(self):
-        return f"Files {self.title}"
 
 class NewsTranslation(models.Model):
     news = models.ForeignKey(News, related_name='translations', on_delete=models.CASCADE)
