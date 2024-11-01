@@ -7,7 +7,7 @@ from rest_framework import mixins, viewsets
 from rest_framework.response import Response
 from rest_framework import viewsets
 from .models import News, Comment
-from .serializers import (NewsSerializer, NewsCreateSerializer, NewsImageCreateSerializer,
+from .serializers import (NewsSerializer, NewsCreateSerializer,
                           CommentSerializer, NewsShortSerializer, CommentCreateSerializer)
 from .filters import NewsFilter, CommentFilter, SubscriberFilter
 
