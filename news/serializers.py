@@ -2,11 +2,13 @@ from rest_framework import serializers
 
 from language.serializers import LanguageSerializer
 from user.serializers import UserSerializer
-from .models import News, NewsTranslation, NewsTag, Comment, VoteComment, Link, NewsImage
+from .models import News, NewsTranslation, NewsTag, Comment, VoteComment, Link, NewsImage, NewsFiles
 from tags.serializers import TagSerializer
 from quote.serializers import QuoteSerializer
 from tags.models import Tag
 from language.models import Language
+
+
 class NewsTagSerializer(serializers.ModelSerializer):
     tag = TagSerializer(read_only=True)
 
@@ -20,12 +22,20 @@ class NewsImageSerializer(serializers.ModelSerializer):
         model = NewsImage
         fields = '__all__'
 
+
+class NewsFilesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsFiles
+        fields = '__all__'
+
+
 class NewsTranslationSerializer(serializers.ModelSerializer):
     lang = LanguageSerializer(read_only=True)
 
     class Meta:
         model = NewsTranslation
         fields = '__all__'
+
 
 class LinkSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,6 +56,7 @@ class CommentCreateSerializer(serializers.ModelSerializer):
         model = Comment
         fields = '__all__'
 
+
 class NewsImageCreateSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
@@ -53,13 +64,16 @@ class NewsImageCreateSerializer(serializers.ModelSerializer):
         if obj.image:
             return f"https://otpannews.kz:8443{obj.image.url}"
         return None
+
     class Meta:
         model = NewsImage
         fields = '__all__'
 
+
 class NewsSerializer(serializers.ModelSerializer):
     translations = serializers.SerializerMethodField()
     images = NewsImageCreateSerializer(many=True, required=False)
+    files = NewsImageCreateSerializer(many=True, required=False)
     comments = CommentSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     quote = QuoteSerializer(read_only=True)
@@ -89,6 +103,7 @@ class NewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
         fields = '__all__'
+
 
 # class NewsCreateSerializer(serializers.ModelSerializer):
 #
@@ -125,18 +140,20 @@ class NewsCreateSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True, required=False)
     links = LinkCreateSerializer(many=True, required=False)
     images = NewsImageCreateSerializer(many=True, required=False)
+    files = NewsImageCreateSerializer(many=True, required=False)
 
     class Meta:
         model = News
         fields = [
             'id', 'author', 'image', 'category', 'subcategory',
             'exclusive', 'is_published', 'quote',
-            'translations', 'tags', 'links','published_at', 'images'
+            'translations', 'tags', 'links', 'published_at', 'images', 'files'
         ]
 
     def create(self, validated_data):
         translations_data = validated_data.pop('translations', [])
         images_data = validated_data.pop('images', [])
+        files_data = validated_data.pop('files', [])
         tags_data = validated_data.pop('tags', [])
         links_data = validated_data.pop('links', [])
 
@@ -144,6 +161,9 @@ class NewsCreateSerializer(serializers.ModelSerializer):
 
         for translation_data in translations_data:
             NewsTranslation.objects.create(news=news_instance, **translation_data)
+
+        for file_data in files_data:
+            NewsFiles.objects.create(news=news_instance, **file_data)
 
         for image_data in images_data:
             NewsImage.objects.create(news=news_instance, **image_data)
@@ -159,6 +179,7 @@ class NewsCreateSerializer(serializers.ModelSerializer):
         # Обновление существующих данных
         translations_data = validated_data.pop('translations', [])
         images_data = validated_data.pop('images', [])
+        files_data = validated_data.pop('images', [])
         tags_data = validated_data.pop('tags', [])
         links_data = validated_data.pop('links', [])
 
@@ -171,6 +192,9 @@ class NewsCreateSerializer(serializers.ModelSerializer):
         instance.images.all().delete()  # Удаляем старые переводы
         for image_data in images_data:
             NewsImage.objects.create(news=instance, **image_data)
+
+        for file_data in files_data:
+            NewsFiles.objects.create(news=instance, **file_data)
 
         instance.translations.all().delete()  # Удаляем старые переводы
         for translation_data in translations_data:
@@ -186,6 +210,7 @@ class NewsCreateSerializer(serializers.ModelSerializer):
 
         return instance
 
+
 class NewsShortSerializer(serializers.ModelSerializer):
     translations = NewsTranslationSerializer(many=True, read_only=True)
     images = NewsImageSerializer(many=True, read_only=True)
@@ -200,7 +225,8 @@ class NewsShortSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = News
-        fields = ['id', 'images', 'author', 'published_at', 'translations', 'category', 'image', 'created_at', 'updated_at']
+        fields = ['id', 'images', 'author', 'published_at', 'translations', 'category', 'image', 'created_at',
+                  'updated_at']
 
 
 class VoteCommentSerializer(serializers.ModelSerializer):

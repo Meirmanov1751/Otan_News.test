@@ -84,7 +84,7 @@ class News(models.Model):
 
 class NewsImage(models.Model):
     news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='images', blank=True, null=True)
-    image = models.ImageField(upload_to='newsNew/images/', blank=True, null=True)
+    image = models.ImageField(upload_to='news/imagesNew/', blank=True, null=True)
     order = models.PositiveIntegerField(default=0, blank=True, null=True)
     source_url = models.URLField(max_length=255, blank=True, null=True)
     alt = models.CharField(max_length=255, blank=True, null=True)
@@ -94,6 +94,16 @@ class NewsImage(models.Model):
 
     def __str__(self):
         return f"Image {self.order} for {self.news}"
+
+
+class NewsFiles(models.Model):
+    news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='files', blank=True, null=True)
+    lang = models.ForeignKey(Language, on_delete=models.CASCADE, blank=True, null=True)
+    title = models.CharField(max_length=255, blank=True, null=True)
+    file = models.ImageField(upload_to='news_files/', blank=True, null=True)
+
+    def __str__(self):
+        return f"Files {self.title}"
 
 class NewsTranslation(models.Model):
     news = models.ForeignKey(News, related_name='translations', on_delete=models.CASCADE)

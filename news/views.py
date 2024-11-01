@@ -1,4 +1,5 @@
 import logging
+from django.utils import timezone
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
@@ -31,9 +32,15 @@ class NewsViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retriev
     pagination_class = NewsPagination
 
     def get_queryset(self):
+        # Получаем базовый queryset с учетом опубликованных новостей
         queryset = super().get_queryset().filter(is_published=True)
-        order_by = self.request.query_params.get('order_by')
 
+        # Фильтруем только те записи, у которых дата публикации уже наступила
+        now = timezone.now()
+        queryset = queryset.filter(published_at__lte=now)
+
+        # Применяем сортировку, если указано поле для сортировки
+        order_by = self.request.query_params.get('order_by')
         if order_by:
             queryset = queryset.order_by(order_by)
 
