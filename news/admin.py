@@ -22,7 +22,6 @@ class NewsTranslationInline(admin.StackedInline):
 class NewsTagInline(admin.TabularInline):  # Или `admin.StackedInline` в зависимости от вашего предпочтения
     model = NewsTag
 
-
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
     list_display = ('id', 'image', 'author_id', 'quote', 'created_at')

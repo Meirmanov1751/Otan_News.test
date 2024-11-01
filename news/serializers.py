@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from language.serializers import LanguageSerializer
 from user.serializers import UserSerializer
 from .models import News, NewsTranslation, NewsTag, Comment, VoteComment, Link
