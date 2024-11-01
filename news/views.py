@@ -1,4 +1,5 @@
 import logging
+from django.utils import timezone
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
@@ -6,7 +7,8 @@ from rest_framework import mixins, viewsets
 from rest_framework.response import Response
 from rest_framework import viewsets
 from .models import News, Comment
-from .serializers import NewsSerializer, NewsCreateSerializer, CommentSerializer, NewsShortSerializer, CommentCreateSerializer
+from .serializers import (NewsSerializer, NewsCreateSerializer,
+                          CommentSerializer, NewsShortSerializer, CommentCreateSerializer)
 from .filters import NewsFilter, CommentFilter, SubscriberFilter
 
 logger = logging.getLogger('comments')
@@ -30,9 +32,15 @@ class NewsViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retriev
     pagination_class = NewsPagination
 
     def get_queryset(self):
+        # Получаем базовый queryset с учетом опубликованных новостей
         queryset = super().get_queryset().filter(is_published=True)
-        order_by = self.request.query_params.get('order_by')
 
+        # Фильтруем только те записи, у которых дата публикации уже наступила
+        now = timezone.now()
+        queryset = queryset.filter(published_at__lte=now)
+
+        # Применяем сортировку, если указано поле для сортировки
+        order_by = self.request.query_params.get('order_by')
         if order_by:
             queryset = queryset.order_by(order_by)
 
@@ -76,9 +84,6 @@ class NewsCreateViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.R
     queryset = News.objects.all()
     serializer_class = NewsCreateSerializer
     
-
-
-
 
 class NewsShortViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
                        mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
