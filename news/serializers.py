@@ -145,8 +145,8 @@ class NewsCreateSerializer(serializers.ModelSerializer):
     translations = NewsTranslationCreateSerializer(many=True, required=False)
     tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True, required=False)
     links = LinkCreateSerializer(many=True, required=False)
-    covers = NewsImageCreateSerializer(many=True, required=False)
-    files = NewsImageCreateSerializer(many=True, required=False)
+    covers = NewsCoverCreateSerializer(many=True, required=False)
+    files = NewsFileSerializer(many=True, required=False)
 
     class Meta:
         model = News
@@ -220,7 +220,7 @@ class NewsCreateSerializer(serializers.ModelSerializer):
 
 class NewsShortSerializer(serializers.ModelSerializer):
     translations = NewsTranslationSerializer(many=True, read_only=True)
-    covers = NewsImageSerializer(many=True, read_only=True)
+    covers = NewsCoverSerializer(many=True, read_only=True)
     author = UserSerializer(read_only=True)
     image = serializers.SerializerMethodField()
 
