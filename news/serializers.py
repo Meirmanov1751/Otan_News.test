@@ -65,7 +65,7 @@ class CommentCreateSerializer(serializers.ModelSerializer):
 
 class NewsCoverCreateSerializer(serializers.ModelSerializer):
 
-    def get_image(self, obj):
+    def get_cover(self, obj):
         request = self.context.get('request')
         if obj.cover:
             return f"https://otpannews.kz:8443{obj.cover.url}"
