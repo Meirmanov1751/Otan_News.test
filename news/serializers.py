@@ -64,7 +64,7 @@ class CommentCreateSerializer(serializers.ModelSerializer):
 
 
 class NewsCoverCreateSerializer(serializers.ModelSerializer):
-
+    cover = serializers.SerializerMethodField()
     def get_cover(self, obj):
         request = self.context.get('request')
         if obj.cover:
