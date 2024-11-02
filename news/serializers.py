@@ -30,6 +30,14 @@ class NewsCoverSerializer(serializers.ModelSerializer):
 
 
 class NewsFileSerializer(serializers.ModelSerializer):
+
+    file = serializers.SerializerMethodField()
+    def get_file(self, obj):
+        request = self.context.get('request')
+        if obj.file:
+            return f"https://otpannews.kz:8443{obj.file.url}"
+        return None
+
     class Meta:
         model = NewsFiles
         fields = '__all__'
