@@ -80,7 +80,7 @@ class NewsCoverCreateSerializer(serializers.ModelSerializer):
 
 class NewsSerializer(serializers.ModelSerializer):
     translations = serializers.SerializerMethodField()
-    covers = NewsCoverCreateSerializer(many=True, required=False)
+    covers = NewsCoverSerializer(many=True, required=False)
     files = NewsFileSerializer(many=True, required=False)
     comments = CommentSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
