@@ -36,6 +36,14 @@ class UserSerializer(serializers.ModelSerializer):
     news_count = serializers.SerializerMethodField()
     total_news_views = serializers.SerializerMethodField()
 
+    def get_news_count(self, user):
+        # Count the number of news posts for this user
+        return News.objects.filter(author=user).count()
+
+    def get_total_news_views(self, user):
+        # Sum the views of all news posts for this user
+        return News.objects.filter(author=user).aggregate(total_views=Sum('views'))['total_views'] or 0
+
     class Meta:
         model = User
         fields = [
@@ -44,10 +52,3 @@ class UserSerializer(serializers.ModelSerializer):
         ]
         ref_name = 'MyAppUserSerializer'
 
-    def get_news_count(self, user):
-        # Count the number of news posts for this user
-        return News.objects.filter(author=user).count()
-
-    def get_total_news_views(self, user):
-        # Sum the views of all news posts for this user
-        return News.objects.filter(author=user).aggregate(total_views=Sum('views'))['total_views'] or 0
