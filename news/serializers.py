@@ -18,12 +18,13 @@ class NewsTagSerializer(serializers.ModelSerializer):
 
 
 class NewsCoverSerializer(serializers.ModelSerializer):
-
-    def get_image(self, obj):
+    cover = serializers.SerializerMethodField()
+    def get_cover(self, obj):
         request = self.context.get('request')
         if obj.cover:
             return f"https://otpannews.kz:8443{obj.cover.url}"
         return None
+
     class Meta:
         model = NewsCover
         fields = '__all__'
@@ -77,6 +78,11 @@ class NewsCoverCreateSerializer(serializers.ModelSerializer):
         model = NewsCover
         fields = '__all__'
 
+class NewsFilesCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = NewsFiles
+        fields = '__all__'
 
 class NewsSerializer(serializers.ModelSerializer):
     translations = serializers.SerializerMethodField()
@@ -148,7 +154,7 @@ class NewsCreateSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True, required=False)
     links = LinkCreateSerializer(many=True, required=False)
     covers = NewsCoverCreateSerializer(many=True, required=False)
-    files = NewsFileSerializer(many=True, required=False)
+    files = NewsFilesCreateSerializer(many=True, required=False)
 
     class Meta:
         model = News
