@@ -72,12 +72,6 @@ class CommentCreateSerializer(serializers.ModelSerializer):
 
 
 class NewsCoverCreateSerializer(serializers.ModelSerializer):
-    cover = serializers.SerializerMethodField()
-    def get_cover(self, obj):
-        request = self.context.get('request')
-        if obj.cover:
-            return f"https://otpannews.kz:8443{obj.cover.url}"
-        return None
 
     class Meta:
         model = NewsCover
