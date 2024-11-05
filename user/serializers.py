@@ -2,6 +2,7 @@ from djoser.serializers import TokenSerializer
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from news.models import News
+from django.db.models import Sum
 
 User = get_user_model()
 
@@ -46,6 +47,4 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_total_news_views(self, user):
         # Sum the views of all news posts for this user
-        return News.objects.filter(author=user).aggregate(total_views=models.Sum('views'))['total_views'] or 0
-
-
+        return News.objects.filter(author=user).aggregate(total_views=Sum('views'))['total_views'] or 0
