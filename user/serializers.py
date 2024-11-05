@@ -1,6 +1,7 @@
 from djoser.serializers import TokenSerializer
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from news.models import News
 
 User = get_user_model()
 
@@ -31,7 +32,20 @@ class ConfirmCodeSerializer(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    news_count = serializers.SerializerMethodField()
+    total_news_views = serializers.SerializerMethodField()
+
     class Meta:
         model = get_user_model()
         fields = '__all__'
         ref_name = 'MyAppUserSerializer'
+
+    def get_news_count(self, user):
+        # Count the number of news posts for this user
+        return News.objects.filter(author=user).count()
+
+    def get_total_news_views(self, user):
+        # Sum the views of all news posts for this user
+        return News.objects.filter(author=user).aggregate(total_views=models.Sum('views'))['total_views'] or 0
+
+
