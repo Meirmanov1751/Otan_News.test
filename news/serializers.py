@@ -160,7 +160,7 @@ class NewsCreateSerializer(serializers.ModelSerializer):
         model = News
         fields = [
             'id', 'author', 'image', 'category', 'subcategory',
-            'exclusive', 'is_published', 'quote',
+            'exclusive', 'is_published', 'quote', "announcement",
             'translations', 'tags', 'links', 'published_at', 'covers', 'files'
         ]
 
@@ -240,7 +240,7 @@ class NewsShortSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = News
-        fields = ['id', 'covers', 'author', 'published_at', 'translations', 'category', 'image', 'created_at',
+        fields = ['id', 'covers', 'announcement', 'author', 'published_at', 'translations', 'category', 'image', 'created_at',
                   'updated_at']
 
 
