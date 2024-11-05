@@ -272,6 +272,7 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_EXPIRE_HOURS': 24,
     'SERIALIZERS': {
         'user_create': 'user.serializers.UserRegistrationSerializer',
+        'user': 'user.serializers.UserSerializer',
         'current_user': 'user.serializers.UserSerializer',
     },
     'SEND_CONFIRMATION_EMAIL': False,  # Отключаем отправку email подтверждения
