@@ -37,8 +37,11 @@ class UserSerializer(serializers.ModelSerializer):
     total_news_views = serializers.SerializerMethodField()
 
     class Meta:
-        model = get_user_model()
-        fields = '__all__'
+        model = User
+        fields = [
+            'id', 'email', 'role', 'first_name', 'last_name', 'phone_number',
+            'news_count', 'total_news_views'
+        ]
         ref_name = 'MyAppUserSerializer'
 
     def get_news_count(self, user):
