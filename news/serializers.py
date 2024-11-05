@@ -171,6 +171,7 @@ class NewsCreateSerializer(serializers.ModelSerializer):
             NewsTranslation.objects.create(news=news_instance, **translation_data)
 
         for file_data in files_data:
+            print(file_data)
             NewsFiles.objects.create(news=news_instance, **file_data)
 
         for cover_data in covers_data:
