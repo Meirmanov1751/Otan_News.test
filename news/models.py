@@ -70,7 +70,7 @@ class News(models.Model):
     is_published = models.BooleanField(default=False)
     published_at = models.DateTimeField(blank=True, null=True)
     views = models.PositiveIntegerField(default=0)
-    link_to_source = models.URLField(blank=True, null=True)
+    link_to_source = models.TextField()
 
     def __str__(self):
         return f"Новость {self.id}"
@@ -88,7 +88,7 @@ class NewsCover(models.Model):
     news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='covers', blank=True, null=True)
     cover = models.ImageField(upload_to='news/covers/', blank=True, null=True)
     order = models.PositiveIntegerField(default=0, blank=True, null=True)
-    source_url = models.URLField(max_length=255, blank=True, null=True)
+    source_url = models.TextField()
     alt = models.CharField(max_length=255, blank=True, null=True)
 
 
