@@ -96,7 +96,7 @@ class NewsFiles(models.Model):
     news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='files', blank=True, null=True)
     lang = models.ForeignKey(Language, on_delete=models.CASCADE, blank=True, null=True)
     title = models.CharField(max_length=255, blank=True, null=True)
-    file = models.ImageField(upload_to='news_files/', blank=True, null=True)
+    file = models.FileField(upload_to='news_files/', blank=True, null=True)
 
 class NewsTranslation(models.Model):
     news = models.ForeignKey(News, related_name='translations', on_delete=models.CASCADE)
