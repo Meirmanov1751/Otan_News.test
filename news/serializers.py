@@ -161,7 +161,7 @@ class NewsCreateSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'author', 'image', 'category', 'subcategory',
             'exclusive', 'is_published', 'quote', "announcement",
-            'translations', 'tags', 'links', 'published_at', 'covers', 'files'
+            'translations', 'tags', 'links', 'published_at', 'covers', 'files',' link_to_source'
         ]
 
     def create(self, validated_data):
