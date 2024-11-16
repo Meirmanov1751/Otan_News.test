@@ -67,7 +67,7 @@ LOGGING = {
 }
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -272,6 +272,7 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_EXPIRE_HOURS': 24,
     'SERIALIZERS': {
         'user_create': 'user.serializers.UserRegistrationSerializer',
+        'user': 'user.serializers.UserSerializer',
         'current_user': 'user.serializers.UserSerializer',
     },
     'SEND_CONFIRMATION_EMAIL': False,  # Отключаем отправку email подтверждения

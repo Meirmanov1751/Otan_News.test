@@ -68,10 +68,12 @@ class News(models.Model):
     category = models.CharField(max_length=50, choices=CATEGORYS.CATEGORY_CHOICES)
     subcategory = models.CharField(max_length=50, choices=SUBCATEGORYS.SUBCATEGORY_CHOICES, blank=True, null=True)
     exclusive = models.BooleanField(default=False)
+    announcement = models.BooleanField(default=False)
     is_published = models.BooleanField(default=False)
     published_at = models.DateTimeField(blank=True, null=True)
     views = models.PositiveIntegerField(default=0)
-    link_source = models.URLField(blank=True, null=True)
+    link_to_source = models.TextField(blank=True, null=True)
+
     def __str__(self):
         return f"Новость {self.id}"
 
@@ -82,6 +84,21 @@ class News(models.Model):
         ordering = ["id"]
         verbose_name = "Новость"
         verbose_name_plural = "Новости"
+
+
+class NewsCover(models.Model):
+    news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='covers', blank=True, null=True)
+    cover = models.ImageField(upload_to='news/covers/', blank=True, null=True)
+    order = models.PositiveIntegerField(default=0, blank=True, null=True)
+    source_url = models.TextField(blank=True, null=True)
+    alt = models.CharField(max_length=255, blank=True, null=True)
+
+
+class NewsFiles(models.Model):
+    news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='files', blank=True, null=True)
+    lang = models.ForeignKey(Language, on_delete=models.CASCADE, blank=True, null=True)
+    title = models.CharField(max_length=255, blank=True, null=True)
+    file = models.FileField(upload_to='news_files/', blank=True, null=True)
 
 class NewsTranslation(models.Model):
     news = models.ForeignKey(News, related_name='translations', on_delete=models.CASCADE)
