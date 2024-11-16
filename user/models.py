@@ -26,6 +26,7 @@ class UserManager(BaseUserManager):
 
         email = self.normalize_email(email)
         other_fields.setdefault('is_active', True)
+        other_fields.setdefault('is_staff', True)
 
         user = self.model(email=email, **other_fields)
         user.set_password(password)
@@ -54,7 +55,7 @@ class User(AbstractBaseUser):
     role = models.CharField(max_length=20, choices=ROLES.ROLES_CHOICES,
                             default=ROLES.GUEST)
     is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 

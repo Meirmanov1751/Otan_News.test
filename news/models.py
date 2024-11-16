@@ -13,6 +13,7 @@ class News(models.Model):
         SOCIETY = 'Society'
         ADVERTISING = 'Advertising'
         BY_EAR = 'By hearing'
+        COMPLIANCE = 'Compliance'
         ANALYTICS = 'Analytics'
         PEOPLE_FROM_MANGYSTAU = 'People from Mangystau'
 
@@ -22,6 +23,7 @@ class News(models.Model):
             (SOCIETY, 'Общество'),
             (ADVERTISING, 'Реклама'),
             (BY_EAR, 'На слуху'),
+            (COMPLIANCE, 'СОГЛАСИЕ'),
             (ANALYTICS, 'Аналитика'),
             (PEOPLE_FROM_MANGYSTAU, 'Выходцы из Мангыстау'),
         )

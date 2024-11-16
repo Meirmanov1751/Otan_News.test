@@ -11,6 +11,7 @@ class CATEGORYS:
     SOCIETY = 'Society'
     ADVERTISING = 'Advertising'
     BY_EAR = 'By hearing'
+    COMPLIANCE = 'Compliance'
     ANALYTICS = 'Analytics'
     PEOPLE_FROM_MANGYSTAU = 'People from Mangystau'
 
@@ -20,6 +21,7 @@ class CATEGORYS:
         (SOCIETY, 'Society'),
         (ADVERTISING, 'Advertising'),
         (BY_EAR, 'By hearing'),
+        (COMPLIANCE, 'СОГЛАСИЕ'),
         (ANALYTICS, 'Analytics'),
         (PEOPLE_FROM_MANGYSTAU, 'People from Mangystau'),
     )
@@ -81,6 +83,7 @@ CATEGORY_SUBCATEGORY_MAP = {
     ],
     CATEGORYS.ADVERTISING: [],
     CATEGORYS.BY_EAR: [],
+    CATEGORYS.COMPLIANCE: [],
 }
 
 # Словарь для быстрого доступа к названию подкатегорий

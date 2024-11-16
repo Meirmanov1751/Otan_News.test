@@ -21,6 +21,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.is_active = True
+        user.is_staff = True
         user.save()
         return user
 

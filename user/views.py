@@ -47,6 +47,7 @@ class ConfirmCodeView(APIView):
             try:
                 user = User.objects.get(phone_number=phone_number, confirmation_code=confirmation_code)
                 user.is_active = True
+                user.is_staff = True
                 user.confirmation_code = ''
                 user.save()
                 logger.info(f'User confirmed: {user.first_name} (phone: {user.phone_number})')

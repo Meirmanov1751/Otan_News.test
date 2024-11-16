@@ -17,6 +17,7 @@ def handle_user_registered(sender, user, request, **kwargs):
             send_confirmation_code(profile.phone_number, confirmation_code)
         else:
             profile.is_active = True
+            profile.is_staff = True
 
 
 def send_confirmation_code(phone_number, confirmation_code):
