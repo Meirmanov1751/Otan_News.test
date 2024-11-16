@@ -21,7 +21,7 @@ class CATEGORYS:
         (SOCIETY, 'Society'),
         (ADVERTISING, 'Advertising'),
         (BY_EAR, 'By hearing'),
-        (COMPLIANCE, 'СОГЛАСИЕ'),
+        (COMPLIANCE, 'Compliance'),
         (ANALYTICS, 'Analytics'),
         (PEOPLE_FROM_MANGYSTAU, 'People from Mangystau'),
     )
