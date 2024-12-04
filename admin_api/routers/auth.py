@@ -104,7 +104,7 @@ async def read_users_me(token: str = Depends(oauth2_scheme)):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
 
 
-@router.get("/users", response_model=List)
+@router.get("/users", response_model=Any)
 async def read_users_list(token: str = Depends(oauth2_scheme), limit: int = 10, offset: int = 0):
     headers = {"Authorization": f"Bearer {token}"}
     params = {"limit": limit, "offset": offset}
