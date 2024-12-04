@@ -105,10 +105,11 @@ async def read_users_me(token: str = Depends(oauth2_scheme)):
 
 
 @router.get("/users", response_model=List)
-async def read_users_list(token: str = Depends(oauth2_scheme)):
+async def read_users_list(token: str = Depends(oauth2_scheme), limit: int = 10, offset: int = 0):
     headers = {"Authorization": f"Bearer {token}"}
+    params = {"limit": limit, "offset": offset}
     async with httpx.AsyncClient() as client:
-        response = await client.get(f'{DJANGO_API_URL}auth/users/', headers=headers)
+        response = await client.get(f'{DJANGO_API_URL}auth/users/', params=params, headers=headers)
 
         if response.status_code == 200:
             return response.json()
