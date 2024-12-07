@@ -41,6 +41,11 @@ class NewsViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retriev
         now = timezone.now()
         queryset = queryset.filter(published_at__lte=now)
 
+        # Фильтруем по lang_id, если параметр указан
+        lang_id = self.request.query_params.get('lang_id')
+        if lang_id:
+            queryset = queryset.filter(translations__lang=lang_id).distinct()
+
         # Применяем сортировку, если указано поле для сортировки
         order_by = self.request.query_params.get('order_by')
         if order_by:
